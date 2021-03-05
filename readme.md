@@ -7,7 +7,7 @@ Splatplost is a software-based Splatpost plotter based on [joycontrol](https://g
 Generate the printing instructions
 
 ```bash
-python ./insgen.py IMAGE.png > IMAGE.order
+python ./insgen.py IMAGE.png IMAGE.order
 ```
 
 Start the printer
