@@ -20,6 +20,10 @@ Enter the switch controller menu, and wait for the device to connect.
 
 Then you may enter the game and splatpost interface. Press enter as instructed, the plotting will begin. You may see the progress and ETA time while printing.
 
+## Help needed / I found a bug / Feature request
+
+Please use github issues.
+
 ## Contributing
 
 All kinds of contributions are welcomed, especially:
