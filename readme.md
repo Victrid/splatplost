@@ -44,7 +44,7 @@ Then you may enter the game and splatpost interface. Press enter as instructed, 
   ```
   instead. The code above instruct the printer to have a 0.1s delay after pressing each button.
 
-  **NOTE**: All these actions will significantly increase the drawing time.
+  **NOTE**: All these actions will significantly increase the drawing time. If you still have this problem, please reopen issue [#4](https://github.com/Victrid/splatplost/issues/4).
 
 ## Help needed / I found a bug / Feature request
 
