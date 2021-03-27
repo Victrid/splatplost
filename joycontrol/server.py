@@ -101,6 +101,7 @@ async def create_hid_server(protocol_factory, ctl_psm=17, itr_psm=19, device_id=
         client_itr, itr_address = await loop.sock_accept(itr_sock)
         logger.info(f'Accepted connection at psm {itr_psm} from {itr_address}')
         assert ctl_address[0] == itr_address[0]
+        reconnect_bt_addr = ctl_address[0]
 
         # stop advertising
         hid.discoverable(False)
@@ -130,4 +131,4 @@ async def create_hid_server(protocol_factory, ctl_psm=17, itr_psm=19, device_id=
         pass
     """
 
-    return protocol.transport, protocol
+    return protocol.transport, protocol, reconnect_bt_addr
