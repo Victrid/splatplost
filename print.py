@@ -94,5 +94,5 @@ if __name__ == "__main__":
     with open(sys.argv[1]) as f:
         orders = f.readlines()
         if len(sys.argv) >= 3:
-            delay_factor = int(sys.argv[2])
+            delay_factor = float(sys.argv[2])
         asyncio.run(printcf(orders, recon_addr))
