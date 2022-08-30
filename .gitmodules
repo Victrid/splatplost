@@ -1,0 +1,3 @@
+[submodule "libnxctrl"]
+	path = libnxctrl
+	url = git@github.com:Victrid/libnxctrl.git
