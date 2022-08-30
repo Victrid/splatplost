@@ -1,19 +1,23 @@
-#!/bin/python
+#!env python
 
+import argparse
 import sys
-import os
-from PIL import Image
+from typing import Union
+
 import numpy as np
 import tqdm
-import argparse
+from PIL import Image
+from skimage import measure
+
+from tsp_solver import solve_tsp_dynamic_programming
 
 
-class reset_pos:
+class ResetPosition:
     def __init__(self, left: bool, up: bool):
         self.left = left
         self.up = up
 
-    def getposcommand(self):
+    def get_command(self):
         if self.left:
             if self.up:
                 return "lu"
@@ -25,38 +29,21 @@ class reset_pos:
             else:
                 return "rd"
 
-    def getpostuple(self):
+    def get_position(self):
         if self.left:
             if self.up:
-                return (0, 0)
+                return 0, 0
             else:
-                return (119, 0)
+                return 119, 0
         else:
             if self.up:
-                return (0, 319)
+                return 0, 319
             else:
-                return (119, 319)
-
-
-def plot_difficulty(a, b):
-    return (a != b).sum()
+                return 119, 319
 
 
 def is_coordinate_valid(x, y):
-    return x >= 0 and x < 120 and y >= 0 and y < 320
-
-
-def find_neighbours(x, y, original_point, visited, distance_threshold):
-    neighbours = []
-    if is_coordinate_valid(x+1, y) and (x+1, y) not in visited and point_distance(original_point, (x+1, y)) < distance_threshold:
-        neighbours.append((x+1, y))
-    if is_coordinate_valid(x, y-1) and (x, y-1) not in visited and point_distance(original_point, (x, y-1)) < distance_threshold:
-        neighbours.append((x, y-1))
-    if is_coordinate_valid(x-1, y) and (x-1, y) not in visited and point_distance(original_point, (x-1, y)) < distance_threshold:
-        neighbours.append((x-1, y))
-    if is_coordinate_valid(x, y+1) and (x, y+1) not in visited and point_distance(original_point, (x, y+1)) < distance_threshold:
-        neighbours.append((x, y+1))
-    return neighbours
+    return 0 <= x < 120 and 0 <= y < 320
 
 
 def argmin(iterable):
@@ -70,134 +57,159 @@ def get_reset(point):
     ad.append(point_distance(point, (0, 319)))
     ad.append(point_distance(point, (0, 0)))
     t = argmin(ad)
-    return reset_pos(t % 2, t//2)
+    return ResetPosition(t % 2, t // 2)
 
 
 def point_distance(a, b):
-    return abs(a[0]-b[0])+abs(a[1]-b[1])
+    return abs(a[0] - b[0]) + abs(a[1] - b[1])
 
 
-def find_next_point(x, y, original_plot, current_plot):
-    search_queue = [(x, y)]
-    visited = [(x, y)]
-    distance_threshold = 500
-    search_queue += find_neighbours(x, y, (x, y), visited, distance_threshold)
-    visited += find_neighbours(x, y, (x, y), visited, distance_threshold)
-    step_bar = tqdm.tqdm(total=320*120, position=1, leave=False)
-    candidates = []
-    while len(search_queue) > 0:
-        point = search_queue[0]
-        search_queue.pop(0)
-        if original_plot[point[0]][point[1]] == current_plot[point[0]][point[1]]:
-            search_queue += find_neighbours(point[0],
-                                            point[1], (x, y), visited, distance_threshold)
-            visited += find_neighbours(point[0], point[1],
-                                       (x, y), visited, distance_threshold)
-            step_bar.update(len(visited)-step_bar.n)
+def goto_next_point(current_point, next_point, draw=True):
+    def march(a, b):
+        output_q = []
+        ver = b[0] - a[0]
+        hor = b[1] - a[1]
+        if ver > 0:
+            output_q += ["down"] * ver
         else:
-            candidates.append(point)
-            if distance_threshold > point_distance(point, (x, y)):
-                distance_threshold = point_distance(point, (x, y))
-    step_bar.update(step_bar.total-step_bar.n)
-    distance_threshold = 500
-    final = (-1, -1)
-    for t in candidates:
-        if point_distance(t, (x, y)) < distance_threshold:
-            final = t
-    step_bar.close()
-    return final
+            output_q += ["up"] * (-ver)
+        if hor > 0:
+            output_q += ["right"] * hor
+        else:
+            output_q += ["left"] * (-hor)
+        return output_q
 
-
-def generate_point_sequence(original_plot, step):
-
-    generated_plot = np.zeros_like(original_plot)
-    generated_plot.fill(1)
-    generated_plot = generated_plot.astype(int)
-    plot_sequence = []
-    current_point = (0, 0)
-    initial_difficulty = plot_difficulty(generated_plot, original_plot)
-    current_difficulty = initial_difficulty
-    if(initial_difficulty == 0):
-        return plot_sequence
-    total_bar = tqdm.tqdm(total=initial_difficulty, position=0)
-    step_counter = 0
-    while current_difficulty != 0:
-        step_counter += 1
-        if step_counter % step == 0:
-            plot_sequence.append(get_reset(current_point))
-            plot_sequence.append(current_point)
-            continue
-        total_bar.update(1)
-        next_point = find_next_point(
-            current_point[0], current_point[1], original_plot, generated_plot)
-        if next_point[0] == -1:
-            raise Exception()
-        plot_sequence.append(next_point)
-        current_point = next_point
-        generated_plot[next_point[0]][next_point[1]
-                                      ] = original_plot[next_point[0]][next_point[1]]
-
-        current_difficulty = plot_difficulty(generated_plot, original_plot)
-    total_bar.close()
-    return plot_sequence
+    return march(current_point, next_point) + ["a"] if draw else march(current_point, next_point)
 
 
 def generate_order_file(seq, filename):
-    def march(a, b):
-        output_q = []
-        ver = b[0]-a[0]
-        hor = b[1]-a[1]
-        if ver > 0:
-            output_q += ["down"]*ver
+    current = (0, 0)
+    command_list = []
+    for item in seq:
+        if isinstance(item, ResetPosition):
+            command_list += [item.get_command()]
+            current = item.get_position()
         else:
-            output_q += ["up"]*(-ver)
-        if hor > 0:
-            output_q += ["right"]*hor
-        else:
-            output_q += ["left"]*(-hor)
-        return output_q
-    num = 0
-    init = (0, 0)
+            command_list += goto_next_point(current, item)
+            current = item
+        pass
     with open(filename, "w+") as f:
-        for item in seq:
-            if type(item) is reset_pos:
-                f.write(item.getposcommand()+"\n")
-                init = item.getpostuple()
-                continue
-            q = march(init, item)
-            for word in q:
-                f.write(word+"\n")
-                num += 1
-            f.write("a\n")
-            num += 1
-            init = item
-    return num
+        f.write("\n".join(command_list))
 
 
-def main(input, output, steps):
-    im = Image.open(input)
+def load_images(input_file_name: str) -> np.ndarray:
+    im = Image.open(input_file_name)
     if not (im.size[0] == 320 and im.size[1] == 120):
         print("ERROR: Image must be 320px by 120px!")
         sys.exit()
     im = im.convert("1")
-    image = np.array(im.getdata()).reshape(120, 320)/255
-    image = image.astype(int)
-    original_num = image.sum()+320*120-1
-    optimized_num = generate_order_file(
-        generate_point_sequence(image, steps), output)
-    sys.stderr.write(
-        f"Complete. Original difficulty: {original_num}, Optimized difficulty:{optimized_num}\n")
+    image = np.array(im.getdata()).reshape(120, 320) / 255
+    image = 1 - image.astype(int)
+    return image
+
+
+def divide_image(image: np.ndarray):
+    # Divide the image into 24 parts to prevent errors in drawing
+    image_patch_size = 40
+    image_list = []
+    for i in range(0, 120, image_patch_size):
+        for j in range(0, 320, image_patch_size):
+            image_list.append(((i, j), image[i:i + image_patch_size, j:j + image_patch_size],))
+    return image_list
+
+
+def get_label(image: np.ndarray) -> tuple[np.ndarray, int]:
+    """
+    Get connected components of the image and return the label
+    """
+    label = measure.label(image, connectivity=1, background=0)
+    label_count = np.max(label)
+    return label, label_count
+
+
+def generate_dense_visit(labeled_image: np.ndarray, label_selector: int, image_offset: np.ndarray) -> list[np.ndarray]:
+    """
+    Generate a list of points that dense label is visited
+    """
+    to_be_visited = (labeled_image == label_selector)
+    current_row = np.argwhere(to_be_visited)[0][0]
+    go_right = True
+    visit_list = []
+    current_list = []
+    for item in np.argwhere(to_be_visited):
+        if item[0] == current_row:
+            current_list.append(item + image_offset)
+        else:
+            visit_list += current_list if go_right else reversed(current_list)
+            current_row = item[0]
+            go_right = not go_right
+            current_list = [item + image_offset]
+    visit_list += current_list if go_right else reversed(current_list)
+    return visit_list
+
+
+def get_entry_exit_point_min_distance(entry_exit_point: list[tuple[np.ndarray, np.ndarray]]) -> list[int]:
+    distance_matrix = np.zeros((len(entry_exit_point), len(entry_exit_point)))
+    for i in range(len(entry_exit_point)):
+        for j in range(len(entry_exit_point)):
+            if i == j or j == 0:
+                continue
+            distance_matrix[i][j] = point_distance(entry_exit_point[i][1], entry_exit_point[j][0])
+    permutation, distance = solve_tsp_dynamic_programming(distance_matrix)
+    return permutation
+
+
+def generate_block_visit(image_block: np.ndarray, image_offset: np.ndarray) -> list[np.ndarray]:
+    """
+    Generate a list of points that dense label is visited
+    """
+    label, label_count = get_label(image_block)
+    if label_count == 0:
+        return []
+    internal_routes = [generate_dense_visit(label, label_idx, image_offset) for label_idx in
+                       range(1, label_count + 1)]
+    offset_entry_exit_point = [(t[0], t[-1]) for t in internal_routes]
+    arrangement = get_entry_exit_point_min_distance(offset_entry_exit_point)
+    visit_list = []
+    for i in arrangement:
+        visit_list += internal_routes[i]
+    return visit_list
+
+
+def summarize_difficulties(image, output):
+    original_difficulty = 2 * np.sum(image) + np.sum(image == 0)
+    with open(output, "r") as f:
+        current_difficulty = len(f.readlines())
+    print("Original difficulty: {}, Current difficulty: {}, reduced: {}".format(
+            original_difficulty,
+            current_difficulty,
+            (original_difficulty - current_difficulty) / original_difficulty * 100
+            )
+            )
+
+
+def main(input, output):
+    image = load_images(input)
+    divided_image = divide_image(image)
+    visit_list: list[Union[ResetPosition, np.ndarray]] = []
+    for item in tqdm.tqdm(divided_image, desc="Blocks to be visited"):
+        visit_list += generate_block_visit(item[1], np.array(item[0]))
+        if len(visit_list) == 0 or isinstance(visit_list[-1], ResetPosition):
+            continue
+        visit_list.append(get_reset(visit_list[-1]))
+    generate_order_file(visit_list, output)
+    summarize_difficulties(image, output)
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
-        description='Generate instructions for plotting.')
+            description='Generate instructions for plotting.'
+            )
     parser.add_argument("-o", "--output", required=True,
-                        dest="output", help="Specify output instruct filename.")
+                        dest="output", help="Specify output instruct filename."
+                        )
     parser.add_argument("-i", "--input", required=True,
-                        dest="input", help="Specify input picture.")
-    parser.add_argument("-s", "--step", dest="step", type=int, default=100000,
-                        help="Specify how many steps before resetting the pointer. This is useful if you do not "
-                        "have a stable bluetooth device.")
+                        dest="input", help="Specify input picture."
+                        )
     args = parser.parse_args()
-    main(args.input, args.output, args.step)
+    main(args.input, args.output)
