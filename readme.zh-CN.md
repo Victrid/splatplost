@@ -29,7 +29,7 @@ sudo splatplan -i <你的图像> -o <输出文件名>
 启动绘图器：
 
 ```bash
-sudo splatplost --order <输出文件名>
+sudo splatplot --order <输出文件名>
 ```
 
 当屏幕上显示 "Open the pairing menu on switch. " 时，进入配对菜单，Switch将被配对。
