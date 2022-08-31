@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="VcsDirectoryMappings">
+    <mapping directory="$PROJECT_DIR$" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/libnxctrl" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/libnxctrl/Poohl_joycontrol" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/libnxctrl/mart1no_joycontrol" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/libnxctrl/nxbt" vcs="Git" />
+  </component>
+</project>
