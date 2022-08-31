@@ -1,0 +1,25 @@
+name: generate-release
+
+on:
+  push:
+    branches: ["master"]
+  
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: "recursive"
+
+      - name: Create zip
+        run: |
+          cd ..
+          zip ${{ github.event.repository.name }}/${{ github.event.repository.name }}-edge.zip ${{ github.event.repository.name }} -r
+          
+      - uses: pyTooling/Actions/releaser@r0
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          tag: edge
+          files: ${{ github.event.repository.name }}-edge.zip
