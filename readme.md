@@ -1,70 +1,56 @@
 # Splatplost
 
-Splatplost is a software-based Splatpost plotter based on [joycontrol](https://github.com/mart1nro/joycontrol). Unlike the former commonly used USB printer which requires a Teensy, or AVR based micro-controllers, You only need a device with bluetooth connection, which is easy to use. With an optimized printing algorithm, this can save you up to 1/3 time printing it.
+[中文](readme.zh-CN.md)
+
+Splatplost is a software-based Splatpost plotter based on [libnxctrl](https://github.com/Victrid/libnxctrl). Unlike the former commonly used USB printer which requires a Teensy, or AVR based microcontrollers, You only need a device with bluetooth connection, which is easy to use. With an optimized printing algorithm, this can save you up to 1/3 time printing it.
 
 ## Basic Usage
 
-Generate the printing instructions
+### Installation
+
+It's recommended to use a physical linux machine. If you don't have one, you may download an Live-CD from [Ubuntu](https://www.ubuntu.com/download/desktop) and continue. Windows or MacOS is not supported, as libnxctrl is based on bluez, the linux bluetooth stack.
+
+You need to use `sudo`, or root, as altering bluetooth is a privileged operation.
 
 ```bash
-python ./insgen.py -i IMAGE.png -o IMAGE.order
+sudo pip install splatplost
 ```
 
-Start the printer
+This will automatically install the required dependencies.
+
+### Use
+
+Generate a plotting plan with:
 
 ```bash
-sudo python ./print.py IMAGE.order
+sudo splatplan -i <your image> -o <output filename>
 ```
 
-Enter the switch controller menu, and wait for the device to connect.
+Start the printer:
 
-Then you may enter the game and splatpost interface. Press enter as instructed, the plotting will begin. You may see the progress and ETA time while printing.
+```bash
+sudo splatplost --order <output filename>
+```
 
-## Common FAQ
+When "Open the pairing menu on switch." shows on the screen, go to the pairing menu, and the switch will be paired.
 
-- Python errors occured
+Then you may enter the game and enter splatpost interface using your own controller. Remember to set the brush to minimum one.
 
-  Please check that you've installed python 3.6+ and pip package `tqdm`, `argparse`, `pillow` and `numpy`.
+When everything is prepaired, disconnect your own controller, (for example, press the tiny pairing button on the top of the controller), and you'll enter the "connect to controller" menu.
 
-  Use `python3` instead of `python` on commands above if needed.
-
-- Distorted printing
-
-  This is caused by unstable bluetooth connection, use `-s` in `./insgen.py` step to specify steps to reset the pointer.
-
-  For example, if you want to reset the pointer after drawing 5000 points, use 
-  ```bash
-  python ./insgen.py -i IMAGE.png -o IMAGE.order -s 5000
-  ```
-  instead.
-
-  You may also change the delay factor (seconds) by using
-  ```bash
-  sudo python ./print.py IMAGE.order 0.1
-  ```
-  instead. The code above instruct the printer to have a 0.1s delay after pressing each button.
-
-  **NOTE**: All these actions will significantly increase the drawing time. If you still have this problem, please reopen issue [#4](https://github.com/Victrid/splatplost/issues/4).
+Press enter or "A" button on your computer as instructed, the plotting will begin. You may see the progress and ETA time while printing.
 
 ## Help needed / I found a bug / Feature request
 
-Please use github issues.
+Click the "Issues" link above to open an issue on the repository.
+
+If you find bugs on connection, please open issues to [libnxctrl](https://github.com/Victrid/libnxctrl).
 
 ## Contributing
 
-All kinds of contributions are welcomed, especially:
 
-**Algorithm Optimization**: The routing algorithm is pretty primitive.
-
-**Timing**: Timing is needed for accurate ETA time displaying and find the best waiting time between button presses.
-
-**Graphic User Interface**: Command line could be a barrier for our users.
-
-**Localization**: Language could be a barrier for our users.
-
-**Porting**: Non-linux users may have problem using this program due to O/S specific problems. For this please contribute to our upper stream source [joycontrol](https://github.com/mart1nro/joycontrol) directly.
 
 ## License
 
-This project is based on joycontrol, so it is released under GPLv3.
+This project is based on libnxctrl, so it is released under GPLv3.
 

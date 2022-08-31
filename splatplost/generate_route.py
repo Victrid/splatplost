@@ -1,15 +1,11 @@
-#!env python
-
-import argparse
 import sys
-from typing import Union
 
 import numpy as np
-import tqdm
 from PIL import Image
+from scipy.spatial.distance import cityblock as manhattan_distance
 from skimage import measure
 
-from tsp_solver import solve_tsp_dynamic_programming
+from splatplost.tsp_solver import solve_tsp_dynamic_programming
 
 
 class ResetPosition:
@@ -19,49 +15,29 @@ class ResetPosition:
 
     def get_command(self):
         if self.left:
-            if self.up:
-                return "lu"
-            else:
-                return "ld"
+            return "lu" if self.up else "ld"
         else:
-            if self.up:
-                return "ru"
-            else:
-                return "rd"
+            return "ru" if self.up else "rd"
 
     def get_position(self):
         if self.left:
-            if self.up:
-                return 0, 0
-            else:
-                return 119, 0
+            return (0, 0) if self.up else (119, 0)
         else:
-            if self.up:
-                return 0, 319
-            else:
-                return 119, 319
+            return (0, 319) if self.up else (119, 319)
 
 
-def is_coordinate_valid(x, y):
+def is_coordinate_valid(x: int, y: int) -> bool:
     return 0 <= x < 120 and 0 <= y < 320
 
 
-def argmin(iterable):
-    return min(enumerate(iterable), key=lambda x: x[1])[0]
+def find_nearest_reset_position(point: np.ndarray) -> ResetPosition:
+    t = np.array([manhattan_distance(point, (119, 319)),
+                  manhattan_distance(point, (119, 0)),
+                  manhattan_distance(point, (0, 319)),
+                  manhattan_distance(point, (0, 0))]
+                 ).argmin()
 
-
-def get_reset(point):
-    ad = []
-    ad.append(point_distance(point, (119, 319)))
-    ad.append(point_distance(point, (119, 0)))
-    ad.append(point_distance(point, (0, 319)))
-    ad.append(point_distance(point, (0, 0)))
-    t = argmin(ad)
-    return ResetPosition(t % 2, t // 2)
-
-
-def point_distance(a, b):
-    return abs(a[0] - b[0]) + abs(a[1] - b[1])
+    return ResetPosition(t % 2 == 0, t // 2 == 0)
 
 
 def goto_next_point(current_point, next_point, draw=True):
@@ -154,7 +130,7 @@ def get_entry_exit_point_min_distance(entry_exit_point: list[tuple[np.ndarray, n
         for j in range(len(entry_exit_point)):
             if i == j or j == 0:
                 continue
-            distance_matrix[i][j] = point_distance(entry_exit_point[i][1], entry_exit_point[j][0])
+            distance_matrix[i][j] = manhattan_distance(entry_exit_point[i][1], entry_exit_point[j][0])
     permutation, distance = solve_tsp_dynamic_programming(distance_matrix)
     return permutation
 
@@ -186,30 +162,3 @@ def summarize_difficulties(image, output):
             (original_difficulty - current_difficulty) / original_difficulty * 100
             )
             )
-
-
-def main(input, output):
-    image = load_images(input)
-    divided_image = divide_image(image)
-    visit_list: list[Union[ResetPosition, np.ndarray]] = []
-    for item in tqdm.tqdm(divided_image, desc="Blocks to be visited"):
-        visit_list += generate_block_visit(item[1], np.array(item[0]))
-        if len(visit_list) == 0 or isinstance(visit_list[-1], ResetPosition):
-            continue
-        visit_list.append(get_reset(visit_list[-1]))
-    generate_order_file(visit_list, output)
-    summarize_difficulties(image, output)
-
-
-if __name__ == "__main__":
-    parser = argparse.ArgumentParser(
-            description='Generate instructions for plotting.'
-            )
-    parser.add_argument("-o", "--output", required=True,
-                        dest="output", help="Specify output instruct filename."
-                        )
-    parser.add_argument("-i", "--input", required=True,
-                        dest="input", help="Specify input picture."
-                        )
-    args = parser.parse_args()
-    main(args.input, args.output)

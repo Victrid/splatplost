@@ -1,0 +1,37 @@
+#!env python
+
+import argparse
+from typing import Union
+
+import numpy as np
+import tqdm
+
+from splatplost.generate_route import ResetPosition, divide_image, generate_block_visit, generate_order_file, find_nearest_reset_position, \
+    load_images, summarize_difficulties
+
+
+def main(input_file, output):
+    image = load_images(input_file)
+    divided_image = divide_image(image)
+    visit_list: list[Union[ResetPosition, np.ndarray]] = []
+    for item in tqdm.tqdm(divided_image, desc="Blocks to be visited"):
+        visit_list += generate_block_visit(item[1], np.array(item[0]))
+        if len(visit_list) == 0 or isinstance(visit_list[-1], ResetPosition):
+            continue
+        visit_list.append(find_nearest_reset_position(visit_list[-1]))
+    generate_order_file(visit_list, output)
+    summarize_difficulties(image, output)
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(
+            description='Generate instructions for plotting.'
+            )
+    parser.add_argument("-o", "--output", required=True,
+                        dest="output", help="Specify output instruct filename."
+                        )
+    parser.add_argument("-i", "--input_file", required=True,
+                        dest="input_file", help="Specify input_file picture."
+                        )
+    args = parser.parse_args()
+    main(args.input, args.output)
