@@ -29,7 +29,7 @@ sudo splatplan -i <your image> -o <output filename>
 Start the printer:
 
 ```bash
-sudo splatplost --order <output filename>
+sudo splatplot --order <output filename>
 ```
 
 When "Open the pairing menu on switch." shows on the screen, go to the pairing menu, and the switch will be paired.
