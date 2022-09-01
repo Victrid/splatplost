@@ -1,8 +1,13 @@
-from setuptools import setup, find_packages
+from pathlib import Path
+
+from setuptools import find_packages, setup
+
+this_directory = Path(__file__).parent
+long_description = (this_directory / "README.md").read_text()
 
 setup(
         name='splatplost',
-        version='0.1.1',
+        version='0.1.2',
         scripts=['splatplost/splatplot', 'splatplost/splatplan'],
         package_dir={'splatplost': 'splatplost'},
         packages=find_packages(),
@@ -11,6 +16,11 @@ setup(
         author='Weihao Jiang',
         author_email='weihau.chiang@gmail.com',
         description='A software-based SplatPost plotter.',
+        long_description=long_description,
+        long_description_content_type='text/markdown',
+        classifiers=[
+            "Development Status :: 3 - Alpha",
+            ],
         install_requires=[
             "numpy~=1.23.2",
             "Pillow~=9.2.0",
@@ -19,6 +29,6 @@ setup(
             "tqdm~=4.64.0",
             "scikit-image~=0.19.3",
             "dbus-python~=1.2.18",
-            "libnxctrl~=0.1.1",
+            "libnxctrl~=0.1.3",
             ]
         )
