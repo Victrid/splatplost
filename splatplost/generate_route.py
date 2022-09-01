@@ -4,8 +4,9 @@ import numpy as np
 from PIL import Image
 from scipy.spatial.distance import cityblock as manhattan_distance
 from skimage import measure
+from tsp_solver.greedy_numpy import solve_tsp as tsp_solver_greedy
 
-from splatplost.tsp_solver import solve_tsp_dynamic_programming
+from .tsp_solver_dp import solve_tsp_dynamic_programming as tsp_solver_dp
 
 
 class ResetPosition:
@@ -124,14 +125,18 @@ def generate_dense_visit(labeled_image: np.ndarray, label_selector: int, image_o
     return visit_list
 
 
-def get_entry_exit_point_min_distance(entry_exit_point: list[tuple[np.ndarray, np.ndarray]]) -> list[int]:
+def get_entry_exit_point_min_distance(entry_exit_point: list[tuple[np.ndarray, np.ndarray]], greedy: int = 3) -> list[
+    int]:
     distance_matrix = np.zeros((len(entry_exit_point), len(entry_exit_point)))
     for i in range(len(entry_exit_point)):
         for j in range(len(entry_exit_point)):
             if i == j or j == 0:
                 continue
             distance_matrix[i][j] = manhattan_distance(entry_exit_point[i][1], entry_exit_point[j][0])
-    permutation, distance = solve_tsp_dynamic_programming(distance_matrix)
+    if greedy != -1:
+        permutation = tsp_solver_greedy(distance_matrix, optim_steps=greedy, endpoints=(0, None))
+    else:
+        permutation, _ = tsp_solver_dp(distance_matrix)
     return permutation
 
 
@@ -145,7 +150,7 @@ def generate_block_visit(image_block: np.ndarray, image_offset: np.ndarray) -> l
     internal_routes = [generate_dense_visit(label, label_idx, image_offset) for label_idx in
                        range(1, label_count + 1)]
     offset_entry_exit_point = [(t[0], t[-1]) for t in internal_routes]
-    arrangement = get_entry_exit_point_min_distance(offset_entry_exit_point)
+    arrangement = get_entry_exit_point_min_distance(offset_entry_exit_point, greedy=16)
     visit_list = []
     for i in arrangement:
         visit_list += internal_routes[i]

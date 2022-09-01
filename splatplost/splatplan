@@ -22,6 +22,7 @@ def main(input_file, output):
     generate_order_file(visit_list, output)
     summarize_difficulties(image, output)
 
+__version__ = "0.1.3"
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
@@ -33,5 +34,7 @@ if __name__ == "__main__":
     parser.add_argument("-i", "--input", required=True,
                         dest="input", help="Specify input picture."
                         )
+    parser.add_argument("--verbose", action="store_true")
+    parser.add_argument("-V", "--version", action="version", version='%(prog)s {version}'.format(version=__version__))
     args = parser.parse_args()
-    main(args.input, args.output)
+    main(args.input, args.output, verbose=args.verbose)
