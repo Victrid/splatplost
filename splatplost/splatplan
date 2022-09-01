@@ -1,4 +1,4 @@
-#!env python
+#!/usr/bin/env python3
 
 import argparse
 from typing import Union
@@ -30,8 +30,8 @@ if __name__ == "__main__":
     parser.add_argument("-o", "--output", required=True,
                         dest="output", help="Specify output instruct filename."
                         )
-    parser.add_argument("-i", "--input_file", required=True,
-                        dest="input_file", help="Specify input_file picture."
+    parser.add_argument("-i", "--input", required=True,
+                        dest="input", help="Specify input picture."
                         )
     args = parser.parse_args()
     main(args.input, args.output)

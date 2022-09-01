@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
         name='splatplost',
-        version='0.1.0',
+        version='0.1.1',
         scripts=['splatplost/splatplot', 'splatplost/splatplan'],
         package_dir={'splatplost': 'splatplost'},
         packages=find_packages(),
@@ -19,6 +19,6 @@ setup(
             "tqdm~=4.64.0",
             "scikit-image~=0.19.3",
             "dbus-python~=1.2.18",
-            "libnxctrl~=0.1.0",
+            "libnxctrl~=0.1.1",
             ]
         )
