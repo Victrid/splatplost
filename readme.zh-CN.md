@@ -34,6 +34,12 @@ sudo splatplan -i <你的图像> -o <输出文件名>
 sudo splatplot --order <输出文件名>
 ```
 
+你可以检查绘图器的选项（例如稳定模式，自定义延迟和按键时间，等等），使用：
+
+```bash
+sudo splatplot --help
+```
+
 当屏幕上显示 "Open the pairing menu on switch. " 时，进入配对菜单，Switch将被配对。
 
 然后你可以进入游戏，用你自己的手柄进入斯普拉遁投稿界面。记得把刷子设置为最小的一个。

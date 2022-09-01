@@ -34,6 +34,12 @@ Start the printer:
 sudo splatplot --order <output filename>
 ```
 
+You may check the printer's option (for example, stable mode, customizing delay and press time, etc.) with:
+
+```bash
+sudo splatplot --help
+```
+
 When "Open the pairing menu on switch." shows on the screen, go to the pairing menu, and the switch will be paired.
 
 Then you may enter the game and enter splatpost interface using your own controller. Remember to set the brush to minimum one.

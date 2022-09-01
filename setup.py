@@ -7,7 +7,7 @@ long_description = (this_directory / "readme.md").read_text()
 
 setup(
         name='splatplost',
-        version='0.1.3',
+        version='0.1.4',
         scripts=['splatplost/splatplot', 'splatplost/splatplan'],
         package_dir={'splatplost': 'splatplost'},
         packages=find_packages(),
@@ -28,7 +28,7 @@ setup(
             "scipy~=1.9.1",
             "tqdm~=4.64.0",
             "scikit-image~=0.19.3",
-            "libnxctrl~=0.1.4",
+            "libnxctrl~=0.1.7",
             "tsp-solver2~=0.4.1",
             ]
         )
