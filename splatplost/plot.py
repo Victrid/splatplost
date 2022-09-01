@@ -1,11 +1,10 @@
-from time import sleep
-from typing import Type
+from typing import Type, Union
 
 import tqdm
 from libnxctrl.wrapper import Button, NXWrapper
 
 
-def reset(connection: NXWrapper, direction=None):
+def reset(direction=None) -> list[tuple[Button, int]]:
     direction_map = {
         'up':    Button.DPAD_UP,
         'down':  Button.DPAD_DOWN,
@@ -14,12 +13,12 @@ def reset(connection: NXWrapper, direction=None):
         }
     if direction is None:
         direction = ['left', 'up']
-    for d in direction:
-        connection.button_hold(direction_map[d], duration_ms=5000)
+    return [(direction_map[d], 8000) for d in direction]
 
 
-def plot(order_list: list[str], backend: Type[NXWrapper], delay_ms: int = 100, press_duration_ms: int = 100):
-    connection = backend(press_duration_ms=press_duration_ms)
+def plot(order_list: list[str], backend: Type[NXWrapper], delay_ms: int = 100, press_duration_ms: int = 100,
+         stable_mode: bool = False):
+    connection = backend(press_duration_ms=press_duration_ms, delay_ms=delay_ms)
     print("Open the pairing menu on switch.")
     connection.connect()
 
@@ -28,22 +27,30 @@ def plot(order_list: list[str], backend: Type[NXWrapper], delay_ms: int = 100, p
         t = input("Press <enter> to draw, or some words ending "
                   "with <enter> to press the A on the pairing menu."
                   )
+        if t.strip() == "":
+            break
         connection.button_press(Button.A)
 
-    # Goto (0,0) point
-    reset(connection, ['left', 'up'])
+    # Goto (0,0) point and clear
+    command_list: list[Union[Button, tuple[Button, int]]] = []
 
-    # Clear
-    connection.button_press(Button.MINUS)
-    sleep(0.5)
+    reset_command = reset(['left', 'up'])
 
-    for order in tqdm.tqdm(order_list):
+    if stable_mode:
+        command_list += reset_command
+        command_list.append(Button.MINUS)
+    else:
+        for button, press_time in reset_command:
+            connection.button_hold(button, duration_ms=press_time)
+        connection.button_press(Button.MINUS)
+
+    for order in tqdm.tqdm(order_list) if not stable_mode else order_list:
         order = order.strip()
         reset_map = {
-            'lu': lambda: reset(connection, ['left', 'up']),
-            'ru': lambda: reset(connection, ['right', 'up']),
-            'ld': lambda: reset(connection, ['left', 'down']),
-            'rd': lambda: reset(connection, ['right', 'down']),
+            'lu': lambda: reset(['left', 'up']),
+            'ru': lambda: reset(['right', 'up']),
+            'ld': lambda: reset(['left', 'down']),
+            'rd': lambda: reset(['right', 'down']),
             }
         button_map = {
             "up":    Button.DPAD_UP,
@@ -56,9 +63,19 @@ def plot(order_list: list[str], backend: Type[NXWrapper], delay_ms: int = 100, p
             "y":     Button.Y,
             }
         if order in reset_map:
-            reset_map[order]()
+            reset_command = reset_map[order]()
+            if stable_mode:
+                command_list += reset_command
+            else:
+                for button, press_time in reset_command:
+                    connection.button_hold(button, duration_ms=press_time)
         elif order in button_map:
-            connection.button_press(button_map[order])
-        sleep(delay_ms / 1000)
+            if stable_mode:
+                command_list.append(button_map[order])
+            else:
+                connection.button_press(button_map[order])
+
+    if stable_mode:
+        connection.series_press(command_list)
 
     connection.disconnect()

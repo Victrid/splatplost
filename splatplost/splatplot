@@ -14,8 +14,16 @@ if __name__ == "__main__":
     parser.add_argument('--delay_time_ms', type=int, default=100, help='The delay time between each step.')
     parser.add_argument('--press_duration_ms', type=int, default=100, help='The duration of each step.')
     parser.add_argument('--order', required=True, help='The order file.')
+    parser.add_argument('--stable', action='store_true',
+                        help='Whether to use stable mode. (Will remove the progress bar but increase stability.)'
+                        )
 
     args = parser.parse_args()
     back = get_backend(args.backend)
     with open(args.order) as f:
-        plot(f.readlines(), back, args.delay_time_ms, args.press_duration_ms)
+        plot(order_list=f.readlines(),
+             backend=back,
+             delay_ms=args.delay_time_ms,
+             press_duration_ms=args.press_duration_ms,
+             stable_mode=args.stable
+             )
