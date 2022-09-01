@@ -18,6 +18,8 @@ sudo pip install splatplost
 
 这将自动安装所需的依赖项。
 
+如果你需要更新库，你可以使用`pip install --upgrade splatplost`。
+
 ### 使用
 
 生成一个绘图计划：

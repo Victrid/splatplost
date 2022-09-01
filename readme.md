@@ -18,6 +18,8 @@ sudo pip install splatplost
 
 This will automatically install the required dependencies.
 
+If you need to update the library, you can use `pip install --upgrade splatplost`.
+
 ### Use
 
 Generate a plotting plan with:
