@@ -32,10 +32,10 @@ def is_coordinate_valid(x: int, y: int) -> bool:
 
 
 def find_nearest_reset_position(point: np.ndarray) -> ResetPosition:
-    t = np.array([manhattan_distance(point, (119, 319)),
+    t = np.array([manhattan_distance(point, (0, 0)),
                   manhattan_distance(point, (119, 0)),
                   manhattan_distance(point, (0, 319)),
-                  manhattan_distance(point, (0, 0))]
+                  manhattan_distance(point, (119, 319))]
                  ).argmin()
 
     return ResetPosition(t % 2 == 0, t // 2 == 0)
