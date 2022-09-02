@@ -38,7 +38,14 @@ def find_nearest_reset_position(point: np.ndarray) -> ResetPosition:
                   manhattan_distance(point, (119, 319))]
                  ).argmin()
 
-    return ResetPosition(t % 2 == 0, t // 2 == 0)
+    dist = [
+        ResetPosition(left=True, up=True),
+        ResetPosition(left=True, up=False),
+        ResetPosition(left=False, up=True),
+        ResetPosition(left=False, up=False)
+        ]
+
+    return dist[t]
 
 
 def goto_next_point(current_point, next_point, draw=True):
