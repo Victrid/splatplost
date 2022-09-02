@@ -5,9 +5,14 @@ from setuptools import find_packages, setup
 this_directory = Path(__file__).parent
 long_description = (this_directory / "readme.md").read_text()
 
+exec(open("splatplost/version.py").read())
+
+# noinspection PyUnresolvedReferences
+version = __version__
+
 setup(
         name='splatplost',
-        version='0.1.4',
+        version=version,
         scripts=['splatplost/splatplot', 'splatplost/splatplan'],
         package_dir={'splatplost': 'splatplost'},
         packages=find_packages(),

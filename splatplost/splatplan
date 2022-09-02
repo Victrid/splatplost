@@ -6,8 +6,9 @@ from typing import Union
 import numpy as np
 import tqdm
 
-from splatplost.generate_route import ResetPosition, divide_image, generate_block_visit, generate_order_file, find_nearest_reset_position, \
-    load_images, summarize_difficulties
+from splatplost.generate_route import ResetPosition, divide_image, find_nearest_reset_position, generate_block_visit, \
+    generate_order_file, load_images, summarize_difficulties
+from splatplost.version import __version__
 
 
 def main(input_file, output):
@@ -22,7 +23,6 @@ def main(input_file, output):
     generate_order_file(visit_list, output)
     summarize_difficulties(image, output)
 
-__version__ = "0.1.3"
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
