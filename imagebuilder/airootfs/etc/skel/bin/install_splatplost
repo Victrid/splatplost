@@ -1,0 +1,37 @@
+#!/usr/bin/bash
+
+set_mirror () {
+    OPTION=$(whiptail --title "Select Pypi Source" \
+        --menu "Pypi source could be slow to access especially in China. Choose your mirror to boost up:" 15 60 5 \
+    0 "Don't modify" \
+    1 "SJTUG Mirror (Shanghai, China)" \
+    2 "TUNA Mirror (Beijing, China)" \
+    3 "Douban Mirror (CDN over China)" \
+    4 "Aliyun Mirror (CDN over China)" \
+    3>&1 1>&2 2>&3)
+
+    mirrorlist=(
+        ""
+        "https://mirror.sjtu.edu.cn/pypi/web/simple"
+        "https://pypi.tuna.tsinghua.edu.cn/simple"
+        "https://pypi.doubanio.com/simple"
+        "https://mirrors.aliyun.com/pypi/simple"
+    )
+
+    exitstatus=$?
+    if [ $exitstatus = 0 ]; then
+        if [[ "${OPTION}" -eq "0" ]]; then
+            echo "You choose to not modify the mirror."
+        else
+            echo "Your chosen mirror:" "${mirrorlist[${OPTION}]}"
+            sudo pip config set global.index-url "${mirrorlist[${OPTION}]}"
+        fi
+    else
+        echo "You chose Cancel."
+        exit 1
+    fi
+}
+
+set_mirror
+echo "Installing splatplost..."
+sudo pip install -U splatplost
