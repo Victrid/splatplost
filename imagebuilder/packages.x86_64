@@ -133,3 +133,5 @@ bluez-utils-compat
 dialog
 libnewt
 okular
+python-pip
+base-devel
