@@ -8,7 +8,7 @@ Splatplost是一个基于[libnxctrl](https://github.com/Victrid/libnxctrl)的斯
 
 ### 安装
 
-建议使用一台物理的linux机器。如果你没有，你可以从[Ubuntu](https://www.ubuntu.com/download/desktop)下载一个Live-CD，然后继续。不支持Windows或MacOS，因为libnxctrl是基于bluez的，即Linux的蓝牙协议栈。
+建议使用一台物理的linux机器。如果你没有，你可以看看[预配置镜像](docs/image.zh-CN.md)然后继续。不支持Windows或MacOS，因为libnxctrl是基于bluez的，即Linux的蓝牙协议栈。
 
 你需要使用`sudo`，或root用户，因为改变蓝牙是一个特权操作。
 

@@ -8,7 +8,7 @@ Splatplost is a software-based Splatpost plotter based on [libnxctrl](https://gi
 
 ### Installation
 
-It's recommended to use a physical linux machine. If you don't have one, you may download an Live-CD from [Ubuntu](https://www.ubuntu.com/download/desktop) and continue. Windows or MacOS is not supported, as libnxctrl is based on bluez, the linux bluetooth stack.
+It's recommended to use a physical linux machine. If you don't have one, you may check the [flashable image](docs/image.md). Windows or macOS is not supported, as libnxctrl is based on bluez, the linux bluetooth stack.
 
 You need to use `sudo`, or root, as altering bluetooth is a privileged operation.
 
