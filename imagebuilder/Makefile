@@ -34,6 +34,6 @@ clean_build:
 	rm -rf /tmp/makepkg
 
 clean:
-
 	rm pacman.conf
 
+clean_all: clean clean_build clean_output clean_repo
