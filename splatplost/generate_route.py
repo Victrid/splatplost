@@ -1,4 +1,6 @@
+import json
 import sys
+from typing import NamedTuple, Union
 
 import numpy as np
 from PIL import Image
@@ -9,76 +11,15 @@ from tsp_solver.greedy_numpy import solve_tsp as tsp_solver_greedy
 from .tsp_solver_dp import solve_tsp_dynamic_programming as tsp_solver_dp
 
 
-class ResetPosition:
-    def __init__(self, left: bool, up: bool):
-        self.left = left
-        self.up = up
-
-    def get_command(self):
-        if self.left:
-            return "lu" if self.up else "ld"
-        else:
-            return "ru" if self.up else "rd"
-
-    def get_position(self):
-        if self.left:
-            return (0, 0) if self.up else (119, 0)
-        else:
-            return (0, 319) if self.up else (119, 319)
+class BlockVisit(NamedTuple):
+    empty: bool
+    entry_point: Union[np.ndarray | tuple[int, int]]
+    exit_point: Union[np.ndarray | tuple[int, int]]
+    visit_route: list[np.ndarray]
 
 
 def is_coordinate_valid(x: int, y: int) -> bool:
     return 0 <= x < 120 and 0 <= y < 320
-
-
-def find_nearest_reset_position(point: np.ndarray) -> ResetPosition:
-    t = np.array([manhattan_distance(point, (0, 0)),
-                  manhattan_distance(point, (119, 0)),
-                  manhattan_distance(point, (0, 319)),
-                  manhattan_distance(point, (119, 319))]
-                 ).argmin()
-
-    dist = [
-        ResetPosition(left=True, up=True),
-        ResetPosition(left=True, up=False),
-        ResetPosition(left=False, up=True),
-        ResetPosition(left=False, up=False)
-        ]
-
-    return dist[t]
-
-
-def goto_next_point(current_point, next_point, draw=True):
-    def march(a, b):
-        output_q = []
-        ver = b[0] - a[0]
-        hor = b[1] - a[1]
-        if ver > 0:
-            output_q += ["down"] * ver
-        else:
-            output_q += ["up"] * (-ver)
-        if hor > 0:
-            output_q += ["right"] * hor
-        else:
-            output_q += ["left"] * (-hor)
-        return output_q
-
-    return march(current_point, next_point) + ["a"] if draw else march(current_point, next_point)
-
-
-def generate_order_file(seq, filename):
-    current = (0, 0)
-    command_list = []
-    for item in seq:
-        if isinstance(item, ResetPosition):
-            command_list += [item.get_command()]
-            current = item.get_position()
-        else:
-            command_list += goto_next_point(current, item)
-            current = item
-        pass
-    with open(filename, "w+") as f:
-        f.write("\n".join(command_list))
 
 
 def load_images(input_file_name: str) -> np.ndarray:
@@ -88,17 +29,21 @@ def load_images(input_file_name: str) -> np.ndarray:
         sys.exit()
     im = im.convert("1")
     image = np.array(im.getdata()).reshape(120, 320) / 255
-    image = 1 - image.astype(int)
-    return image
+    return 1 - image.astype(int)
 
 
-def divide_image(image: np.ndarray):
-    # Divide the image into 24 parts to prevent errors in drawing
-    image_patch_size = 40
+def divide_image(image: np.ndarray, horizontal_divider: int = 8, vertical_divider: int = 3) -> list[
+    tuple[tuple[int, int], np.ndarray]]:
+    # Divide the image into parts to prevent errors in drawing
     image_list = []
-    for i in range(0, 120, image_patch_size):
-        for j in range(0, 320, image_patch_size):
-            image_list.append(((i, j), image[i:i + image_patch_size, j:j + image_patch_size],))
+    # Check if divider is valid
+    if 320 % horizontal_divider != 0:
+        raise ValueError("Horizontal divider must be a divisor of 320")
+    if 120 % vertical_divider != 0:
+        raise ValueError("Vertical divider must be a divisor of 120")
+    for i in range(0, 120, 120 // vertical_divider):
+        for j in range(0, 320, 320 // horizontal_divider):
+            image_list.append(((i, j), image[i:i + 120 // vertical_divider, j:j + 320 // horizontal_divider],))
     return image_list
 
 
@@ -118,7 +63,7 @@ def generate_dense_visit(labeled_image: np.ndarray, label_selector: int, image_o
     to_be_visited = (labeled_image == label_selector)
     current_row = np.argwhere(to_be_visited)[0][0]
     go_right = True
-    visit_list = []
+    visit_list: list[np.ndarray] = []
     current_list = []
     for item in np.argwhere(to_be_visited):
         if item[0] == current_row:
@@ -132,8 +77,12 @@ def generate_dense_visit(labeled_image: np.ndarray, label_selector: int, image_o
     return visit_list
 
 
-def get_entry_exit_point_min_distance(entry_exit_point: list[tuple[np.ndarray, np.ndarray]], greedy: int = 3) -> list[
-    int]:
+def get_entry_exit_point_min_distance(entry_exit_point: list[tuple[np.ndarray, np.ndarray]],
+                                      greedy: int = 3) -> list[int]:
+    """
+    For each drawing block, having an entry point and an exit point. Find the minimum distance to travel through
+    all drawing blocks, from one's exit point to another one's entry point.
+    """
     distance_matrix = np.zeros((len(entry_exit_point), len(entry_exit_point)))
     for i in range(len(entry_exit_point)):
         for j in range(len(entry_exit_point)):
@@ -147,13 +96,13 @@ def get_entry_exit_point_min_distance(entry_exit_point: list[tuple[np.ndarray, n
     return permutation
 
 
-def generate_block_visit(image_block: np.ndarray, image_offset: np.ndarray) -> list[np.ndarray]:
+def generate_block_visit(image_block: np.ndarray, image_offset: np.ndarray) -> BlockVisit:
     """
     Generate a list of points that dense label is visited
     """
     label, label_count = get_label(image_block)
     if label_count == 0:
-        return []
+        return BlockVisit(empty=True, visit_route=[], entry_point=(-1, -1), exit_point=(-1, -1))
     internal_routes = [generate_dense_visit(label, label_idx, image_offset) for label_idx in
                        range(1, label_count + 1)]
     offset_entry_exit_point = [(t[0], t[-1]) for t in internal_routes]
@@ -161,16 +110,39 @@ def generate_block_visit(image_block: np.ndarray, image_offset: np.ndarray) -> l
     visit_list = []
     for i in arrangement:
         visit_list += internal_routes[i]
-    return visit_list
+
+    if len(visit_list) > 0:
+        return BlockVisit(empty=False, visit_route=visit_list, entry_point=visit_list[0], exit_point=visit_list[-1])
+    else:
+        return BlockVisit(empty=True, visit_route=[], entry_point=(-1, -1), exit_point=(-1, -1))
 
 
-def summarize_difficulties(image, output):
-    original_difficulty = 2 * np.sum(image) + np.sum(image == 0)
-    with open(output, "r") as f:
-        current_difficulty = len(f.readlines())
-    print("Original difficulty: {}, Current difficulty: {}, reduced: {}".format(
-            original_difficulty,
-            current_difficulty,
-            (original_difficulty - current_difficulty) / original_difficulty * 100
-            )
-            )
+def generate_route_file(input_file: str, output: str, horizontal_divider: int = 8, vertical_divider: int = 3) -> None:
+    from splatplost.version import __version__
+    image = load_images(input_file)
+    divided_image = divide_image(image, horizontal_divider=horizontal_divider, vertical_divider=vertical_divider)
+    visit_list: list[tuple[tuple[int, int], int, BlockVisit]] = []
+    for block_idx, item in enumerate(divided_image):
+        block_visit = generate_block_visit(item[1], np.array(item[0]))
+        if block_visit.empty:
+            continue
+        visit_list.append((item[0], block_idx, block_visit))
+
+    output_dict = {
+        "splatplost_version": __version__,
+        "divide_schedule":    {
+            "horizontal_divider": horizontal_divider,
+            "vertical_divider":   vertical_divider
+            }
+        }
+    blocks = dict()
+    for index, block_idx, visit in visit_list:
+        blocks["{}".format(block_idx)] = {
+            "entry_point": "{},{}".format(visit.entry_point[0], visit.entry_point[1]),
+            "exit_point":  "{},{}".format(visit.exit_point[0], visit.exit_point[1]),
+            "visit_route": ["{},{}".format(s[0], s[1]) for s in visit.visit_route]
+            }
+    output_dict["blocks"] = blocks
+
+    with open(output, "w") as f:
+        json.dump(output_dict, f, indent=4)

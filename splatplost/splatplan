@@ -1,27 +1,13 @@
 #!/usr/bin/env python3
 
 import argparse
-from typing import Union
 
-import numpy as np
-import tqdm
-
-from splatplost.generate_route import ResetPosition, divide_image, find_nearest_reset_position, generate_block_visit, \
-    generate_order_file, load_images, summarize_difficulties
+from splatplost.generate_route import generate_route_file
 from splatplost.version import __version__
 
 
 def main(input_file, output):
-    image = load_images(input_file)
-    divided_image = divide_image(image)
-    visit_list: list[Union[ResetPosition, np.ndarray]] = []
-    for item in tqdm.tqdm(divided_image, desc="Blocks to be visited"):
-        visit_list += generate_block_visit(item[1], np.array(item[0]))
-        if len(visit_list) == 0 or isinstance(visit_list[-1], ResetPosition):
-            continue
-        visit_list.append(find_nearest_reset_position(visit_list[-1]))
-    generate_order_file(visit_list, output)
-    summarize_difficulties(image, output)
+    generate_route_file(input_file, output)
 
 
 if __name__ == "__main__":

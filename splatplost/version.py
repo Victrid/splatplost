@@ -1,1 +1,5 @@
-__version__ = '0.2.0'
+version_major = 0
+version_minor = 2
+version_patch = 0
+
+__version__ = f"{version_major}.{version_minor}.{version_patch}"
