@@ -1,0 +1,11 @@
+# remove from airootfs!
+[Trigger]
+Operation = Install
+Operation = Upgrade
+Type = Package
+Target = breeze
+
+[Action]
+Description = Setup background wallpapers...
+When = PostTransaction
+Exec = /usr/bin/sh -c "rm -rf /usr/share/wallpapers/Next/contents && mkdir -p /usr/share/wallpapers/Next/contents/images && cp /usr/share/wallpapers/splatplost.svg /usr/share/wallpapers/Next/contents/images/1920x1080.svg"

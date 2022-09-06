@@ -1,0 +1,8 @@
+#!/usr/bin/bash
+if [[ -f /usr/bin/splatplan ]]; then
+    echo "You're trying to run splatplan without root privilege. Please run:"
+    echo sudo splatplan $@
+else
+    echo "The splatplost is not installed. Please run:"
+    echo "install_splatplost"
+fi
