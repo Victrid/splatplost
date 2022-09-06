@@ -12,6 +12,9 @@ from .tsp_solver_dp import solve_tsp_dynamic_programming as tsp_solver_dp
 
 
 class BlockVisit(NamedTuple):
+    """
+    A named tuple to store the block visit information.
+    """
     empty: bool
     entry_point: Union[np.ndarray | tuple[int, int]]
     exit_point: Union[np.ndarray | tuple[int, int]]
@@ -19,10 +22,23 @@ class BlockVisit(NamedTuple):
 
 
 def is_coordinate_valid(x: int, y: int) -> bool:
+    """
+    Check if the coordinate is valid
+
+    :param x: The x coordinate
+    :param y: The y coordinate
+    :return: True if the coordinate is valid, False otherwise
+    """
     return 0 <= x < 120 and 0 <= y < 320
 
 
 def load_images(input_file_name: str) -> np.ndarray:
+    """
+    Load the image from the input file
+
+    :param input_file_name: The input file name
+    :return: The image in binary numpy array, where 1 is black and 0 is white
+    """
     im = Image.open(input_file_name)
     if not (im.size[0] == 320 and im.size[1] == 120):
         print("ERROR: Image must be 320px by 120px!")
@@ -32,9 +48,15 @@ def load_images(input_file_name: str) -> np.ndarray:
     return 1 - image.astype(int)
 
 
-def divide_image(image: np.ndarray, horizontal_divider: int = 8, vertical_divider: int = 3) -> list[
-    tuple[tuple[int, int], np.ndarray]]:
-    # Divide the image into parts to prevent errors in drawing
+def divide_image(image: np.ndarray, horizontal_divider: int = 8,
+                 vertical_divider: int = 3) -> list[tuple[tuple[int, int], np.ndarray]]:
+    """
+    Divide the image into parts to prevent errors in drawing
+
+    :param image: The image to be divided
+    :param horizontal_divider: The number of horizontal parts
+    :param vertical_divider: The number of vertical parts
+    """
     image_list = []
     # Check if divider is valid
     if 320 % horizontal_divider != 0:
@@ -49,7 +71,10 @@ def divide_image(image: np.ndarray, horizontal_divider: int = 8, vertical_divide
 
 def get_label(image: np.ndarray) -> tuple[np.ndarray, int]:
     """
-    Get connected components of the image and return the label
+    Get connected components of the image and return the label.
+
+    :param image: The image to be processed
+    :return: A tuple of labeled image and the number of labels
     """
     label = measure.label(image, connectivity=1, background=0)
     label_count = np.max(label)
@@ -59,6 +84,10 @@ def get_label(image: np.ndarray) -> tuple[np.ndarray, int]:
 def generate_dense_visit(labeled_image: np.ndarray, label_selector: int, image_offset: np.ndarray) -> list[np.ndarray]:
     """
     Generate a list of points that dense label is visited
+
+    :param labeled_image: The labeled image, with background as 0 and connected components as 1, 2, 3, ...
+    :param label_selector: The label to be processed
+    :param image_offset: The offset to original image of (0,0) of the image block
     """
     to_be_visited = (labeled_image == label_selector)
     current_row = np.argwhere(to_be_visited)[0][0]
@@ -82,6 +111,9 @@ def get_entry_exit_point_min_distance(entry_exit_point: list[tuple[np.ndarray, n
     """
     For each drawing block, having an entry point and an exit point. Find the minimum distance to travel through
     all drawing blocks, from one's exit point to another one's entry point.
+
+    :param entry_exit_point: A list of tuple, each tuple contains the entry point and exit point of a drawing block
+    :param greedy: The number of points to be used in greedy algorithm
     """
     distance_matrix = np.zeros((len(entry_exit_point), len(entry_exit_point)))
     for i in range(len(entry_exit_point)):
@@ -99,6 +131,10 @@ def get_entry_exit_point_min_distance(entry_exit_point: list[tuple[np.ndarray, n
 def generate_block_visit(image_block: np.ndarray, image_offset: np.ndarray) -> BlockVisit:
     """
     Generate a list of points that dense label is visited
+
+    :param image_block: The image block to be processed
+    :param image_offset: The offset to original image of (0,0) of the image block
+    :return: A named tuple of BlockVisit
     """
     label, label_count = get_label(image_block)
     if label_count == 0:
@@ -118,6 +154,14 @@ def generate_block_visit(image_block: np.ndarray, image_offset: np.ndarray) -> B
 
 
 def generate_route_file(input_file: str, output: str, horizontal_divider: int = 8, vertical_divider: int = 3) -> None:
+    """
+    Generate a route file for the input image
+
+    :param input_file: Input file name
+    :param output: Output file name
+    :param horizontal_divider: Divide how many blocks horizontally (must be a divisor of 320)
+    :param vertical_divider: Divide how many blocks vertically (must be a divisor of 120)
+    """
     from splatplost.version import __version__
     image = load_images(input_file)
     divided_image = divide_image(image, horizontal_divider=horizontal_divider, vertical_divider=vertical_divider)
@@ -145,4 +189,4 @@ def generate_route_file(input_file: str, output: str, horizontal_divider: int = 
     output_dict["blocks"] = blocks
 
     with open(output, "w") as f:
-        json.dump(output_dict, f, indent=4)
+        json.dump(output_dict, f, indent=2)
