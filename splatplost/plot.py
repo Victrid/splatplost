@@ -296,8 +296,6 @@ def partial_plot_with_conn(connection: NXWrapper, blocks,
                 position=current_position,
                 keyBinding=key_binding
                 )
-        # TODO: ask for confirmation
-        print("Executing... {}".format(command_list))
         execute_command_list(command_list, connection, stable_mode=stable_mode)
 
 

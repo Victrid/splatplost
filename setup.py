@@ -13,7 +13,7 @@ version = __version__
 setup(
         name='splatplost',
         version=version,
-        scripts=['splatplost/splatplot', 'splatplost/splatplan', 'splatplost/gui/splatplost'],
+        scripts=['splatplost/gui/splatplost'],
         package_dir={'splatplost': 'splatplost'},
         packages=find_packages(),
         url='https://github.com/Victrid/splatplost',

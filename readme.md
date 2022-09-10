@@ -22,31 +22,11 @@ If you need to update the library, you can use `pip install --upgrade splatplost
 
 ### Use
 
-Generate a plotting plan with:
+Start the GUI with:
 
 ```bash
-sudo splatplan -i <your image> -o <output filename>
+sudo splatplost
 ```
-
-Start the printer:
-
-```bash
-sudo splatplot --order <output filename>
-```
-
-You may check the printer's option (for example, stable mode, customizing delay and press time, etc.) with:
-
-```bash
-sudo splatplot --help
-```
-
-When "Open the pairing menu on switch." shows on the screen, go to the pairing menu, and the switch will be paired.
-
-Then you may enter the game and enter splatpost interface using your own controller. Remember to set the brush to minimum one.
-
-When everything is prepaired, disconnect your own controller, (for example, press the tiny pairing button on the top of the controller), and you'll enter the "connect to controller" menu.
-
-Press enter or "A" button on your computer as instructed, the plotting will begin. You may see the progress and ETA time while printing.
 
 ## Help needed / I found a bug / Feature request
 
@@ -56,7 +36,11 @@ If you find bugs on connection, please open issues to [libnxctrl](https://github
 
 ## Contributing
 
-
+- **Internationalization**: No coding skills needed
+- **Documentation**: No coding skills needed
+- Help resolving issues
+- Refactor, bug fixes
+- Algorithm optimization
 
 ## License
 
