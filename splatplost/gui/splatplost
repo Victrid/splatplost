@@ -1,0 +1,4 @@
+#!env python
+from splatplost.gui.plotter import main
+
+main()

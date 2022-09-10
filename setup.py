@@ -13,7 +13,7 @@ version = __version__
 setup(
         name='splatplost',
         version=version,
-        scripts=['splatplost/splatplot', 'splatplost/splatplan'],
+        scripts=['splatplost/splatplot', 'splatplost/splatplan', 'splatplost/gui/splatplost'],
         package_dir={'splatplost': 'splatplost'},
         packages=find_packages(),
         url='https://github.com/Victrid/splatplost',
@@ -35,5 +35,9 @@ setup(
             "scikit-image~=0.19.3",
             "libnxctrl~=0.1.7",
             "tsp-solver2~=0.4.1",
-            ]
+            "PyQt6~=6.3.1"
+            ],
+        package_data={
+            "splatplost": ["splatplost/gui/*.ui"]
+            }
         )

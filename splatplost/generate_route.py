@@ -1,5 +1,4 @@
 import json
-import sys
 from typing import NamedTuple, Union
 
 import numpy as np
@@ -7,8 +6,6 @@ from PIL import Image
 from scipy.spatial.distance import cityblock as manhattan_distance
 from skimage import measure
 from tsp_solver.greedy_numpy import solve_tsp as tsp_solver_greedy
-
-from .tsp_solver_dp import solve_tsp_dynamic_programming as tsp_solver_dp
 
 
 class BlockVisit(NamedTuple):
@@ -41,31 +38,30 @@ def load_images(input_file_name: str) -> np.ndarray:
     """
     im = Image.open(input_file_name)
     if not (im.size[0] == 320 and im.size[1] == 120):
-        print("ERROR: Image must be 320px by 120px!")
-        sys.exit()
+        raise ValueError("Image must be 320px by 120px!")
     im = im.convert("1")
     image = np.array(im.getdata()).reshape(120, 320) / 255
     return 1 - image.astype(int)
 
 
-def divide_image(image: np.ndarray, horizontal_divider: int = 8,
-                 vertical_divider: int = 3) -> list[tuple[tuple[int, int], np.ndarray]]:
+def divide_image(image: np.ndarray, vertical_divider: int = 8,
+                 horizontal_divider: int = 3) -> list[tuple[tuple[int, int], np.ndarray]]:
     """
     Divide the image into parts to prevent errors in drawing
 
     :param image: The image to be divided
-    :param horizontal_divider: The number of horizontal parts
-    :param vertical_divider: The number of vertical parts
+    :param vertical_divider: The number of horizontal parts
+    :param horizontal_divider: The number of vertical parts
     """
     image_list = []
     # Check if divider is valid
-    if 320 % horizontal_divider != 0:
+    if 320 % vertical_divider != 0:
         raise ValueError("Horizontal divider must be a divisor of 320")
-    if 120 % vertical_divider != 0:
+    if 120 % horizontal_divider != 0:
         raise ValueError("Vertical divider must be a divisor of 120")
-    for i in range(0, 120, 120 // vertical_divider):
-        for j in range(0, 320, 320 // horizontal_divider):
-            image_list.append(((i, j), image[i:i + 120 // vertical_divider, j:j + 320 // horizontal_divider],))
+    for i in range(0, 120, 120 // horizontal_divider):
+        for j in range(0, 320, 320 // vertical_divider):
+            image_list.append(((i, j), image[i:i + 120 // horizontal_divider, j:j + 320 // vertical_divider],))
     return image_list
 
 
@@ -121,10 +117,7 @@ def get_entry_exit_point_min_distance(entry_exit_point: list[tuple[np.ndarray, n
             if i == j or j == 0:
                 continue
             distance_matrix[i][j] = manhattan_distance(entry_exit_point[i][1], entry_exit_point[j][0])
-    if greedy != -1:
-        permutation = tsp_solver_greedy(distance_matrix, optim_steps=greedy, endpoints=(0, None))
-    else:
-        permutation, _ = tsp_solver_dp(distance_matrix)
+    permutation = tsp_solver_greedy(distance_matrix, optim_steps=greedy, endpoints=(0, None))
     return permutation
 
 
@@ -164,7 +157,7 @@ def generate_route_file(input_file: str, output: str, horizontal_divider: int = 
     """
     from splatplost.version import __version__
     image = load_images(input_file)
-    divided_image = divide_image(image, horizontal_divider=horizontal_divider, vertical_divider=vertical_divider)
+    divided_image = divide_image(image, vertical_divider=horizontal_divider, horizontal_divider=vertical_divider)
     visit_list: list[tuple[tuple[int, int], int, BlockVisit]] = []
     for block_idx, item in enumerate(divided_image):
         block_visit = generate_block_visit(item[1], np.array(item[0]))
@@ -175,8 +168,8 @@ def generate_route_file(input_file: str, output: str, horizontal_divider: int = 
     output_dict = {
         "splatplost_version": __version__,
         "divide_schedule":    {
-            "horizontal_divider": horizontal_divider,
-            "vertical_divider":   vertical_divider
+            "vertical_divider": horizontal_divider,
+            "horizontal_divider":   vertical_divider
             }
         }
     blocks = dict()
