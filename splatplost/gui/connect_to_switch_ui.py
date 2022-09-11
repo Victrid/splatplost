@@ -8,7 +8,7 @@ from pathlib import Path
 
 from PyQt6 import uic
 
-file_path = Path(__file__).parent / "connect_to_switch.ui"
+file_path: Path = Path(__file__).parent / "connect_to_switch.ui"
 
 Form_ConnectToSwitch, Dialog_ConnectToSwitch = uic.loadUiType(str(file_path))
 

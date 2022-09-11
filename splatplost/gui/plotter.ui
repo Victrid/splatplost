@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>619</width>
-    <height>423</height>
+    <height>457</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -92,7 +92,7 @@
          <bool>false</bool>
         </property>
         <property name="text">
-         <string>Right click to select, Left click to delect.</string>
+         <string>Right click to select, Left click to deselect.</string>
         </property>
        </widget>
       </item>
@@ -219,7 +219,7 @@
          <number>0</number>
         </property>
         <property name="textVisible">
-         <bool>false</bool>
+         <bool>true</bool>
         </property>
        </widget>
       </item>
@@ -234,62 +234,6 @@
     </item>
     <item>
      <layout class="QVBoxLayout" name="verticalLayout_2">
-      <item>
-       <layout class="QHBoxLayout" name="connection_layout">
-        <property name="leftMargin">
-         <number>6</number>
-        </property>
-        <property name="topMargin">
-         <number>6</number>
-        </property>
-        <property name="rightMargin">
-         <number>6</number>
-        </property>
-        <property name="bottomMargin">
-         <number>6</number>
-        </property>
-        <item>
-         <widget class="QPushButton" name="switch_conn">
-          <property name="text">
-           <string>Connect to Switch</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QRadioButton" name="switch_connected">
-          <property name="enabled">
-           <bool>false</bool>
-          </property>
-          <property name="text">
-           <string>Connected</string>
-          </property>
-          <property name="checkable">
-           <bool>true</bool>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <spacer name="horizontalSpacer">
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>40</width>
-            <height>20</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-       </layout>
-      </item>
-      <item>
-       <widget class="Line" name="line_4">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-       </widget>
-      </item>
       <item>
        <layout class="QGridLayout" name="drawing_options_layout">
         <property name="leftMargin">
@@ -375,6 +319,62 @@
        </layout>
       </item>
       <item>
+       <layout class="QHBoxLayout" name="connection_layout">
+        <property name="leftMargin">
+         <number>6</number>
+        </property>
+        <property name="topMargin">
+         <number>6</number>
+        </property>
+        <property name="rightMargin">
+         <number>6</number>
+        </property>
+        <property name="bottomMargin">
+         <number>6</number>
+        </property>
+        <item>
+         <widget class="QPushButton" name="switch_conn">
+          <property name="text">
+           <string>Connect to Switch</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QRadioButton" name="switch_connected">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
+          <property name="text">
+           <string>Connected</string>
+          </property>
+          <property name="checkable">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <spacer name="horizontalSpacer">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <widget class="Line" name="line_4">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+       </widget>
+      </item>
+      <item>
        <widget class="QComboBox" name="splatoon_ver">
         <property name="placeholderText">
          <string>Choose Splatoon Version</string>
@@ -423,6 +423,52 @@
    </layout>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
+  <widget class="QMenuBar" name="menuBar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>619</width>
+     <height>34</height>
+    </rect>
+   </property>
+   <property name="defaultUp">
+    <bool>false</bool>
+   </property>
+   <property name="nativeMenuBar">
+    <bool>false</bool>
+   </property>
+   <widget class="QMenu" name="menuLanguage">
+    <property name="title">
+     <string>Language</string>
+    </property>
+    <addaction name="language_enUS"/>
+    <addaction name="language_jaJP"/>
+    <addaction name="language_zhCN"/>
+    <addaction name="language_zhTW"/>
+   </widget>
+   <addaction name="menuLanguage"/>
+  </widget>
+  <action name="language_zhTW">
+   <property name="text">
+    <string>繁體中文</string>
+   </property>
+  </action>
+  <action name="language_zhCN">
+   <property name="text">
+    <string>简体中文</string>
+   </property>
+  </action>
+  <action name="language_jaJP">
+   <property name="text">
+    <string>日本語</string>
+   </property>
+  </action>
+  <action name="language_enUS">
+   <property name="text">
+    <string>English</string>
+   </property>
+  </action>
  </widget>
  <resources/>
  <connections/>

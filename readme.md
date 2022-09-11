@@ -36,7 +36,7 @@ If you find bugs on connection, please open issues to [libnxctrl](https://github
 
 ## Contributing
 
-- **Internationalization**: No coding skills needed
+- **Internationalization**: No coding skills needed, see [translation](docs/translation.md) for more information.
 - **Documentation**: No coding skills needed
 - Help resolving issues
 - Refactor, bug fixes
