@@ -20,6 +20,16 @@ This will automatically install the required dependencies.
 
 If you need to update the library, you can use `pip install --upgrade splatplost`.
 
+### Important for Use on a Linux VM (with Windows host)
+
+You need:
+A generic USB Bluetooth adapter
+VirtualBox installed on the host computer
+
+Make sure Bluetooth adapter is inserted into USB slot of host device. You should have a Linux virtual machine (Ubuntu works) running through VirtualBox, with guest additions enabled. In the VirtualBox menu, right click on the VM instance -> Settings -> USB -> Add Device to add your generic USB bluetooth adapter. On Windows host, right click on Win logo -> Device Manager -> Bluetooth, then right click on the bluetooth adapter and disable device to hand access over to the guest machine. You should now be able to enable Bluetooth in Ubuntu settings and pair to your Switch.
+
+I also tried passing through my onboard Bluetooth chip using VMware, but wasn't able to pair with the Switch even though I could enable Bluetooth in Ubuntu settings. I recommend attempting the above if you have a spare bluetooth adapter laying around.
+
 ### Use
 
 Generate a plotting plan with:
