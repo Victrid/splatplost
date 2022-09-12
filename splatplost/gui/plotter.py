@@ -1,5 +1,6 @@
 import sys
 import tempfile
+from functools import partial
 from pathlib import Path
 
 from PIL import Image, ImageQt
@@ -14,6 +15,7 @@ from libnxctrl.wrapper import Button, NXWrapper
 from splatplost.generate_route import generate_route_file
 from splatplost.gui.connect_to_switch_ui import Form_ConnectToSwitch
 from splatplost.gui.plotter_ui import Form_plotter
+from splatplost.keybindings import Splatoon2KeyBinding, Splatoon3KeyBinding
 from splatplost.plot import partial_erase_with_conn, partial_plot_with_conn
 from splatplost.route_handler import RouteFile
 from splatplost.version import __version__
@@ -48,9 +50,6 @@ class ConnectToSwitchUI(Form_ConnectToSwitch):
         self.current_pairing_guide_image = 0
 
     def start_pairing_clicked(self):
-        if self.parent.connection is not None:
-            self.parent.connection.disconnect()
-        self.parent.connection = None
         self.start_pairing.setEnabled(False)
         self.start_pairing.setText(QApplication.translate("@default", "Pairing..."))
         self.parent.start_pairing(success_callback=self.finished_pairing, fail_callback=self.error_pairing)
@@ -87,35 +86,39 @@ class WorkerSignals(QObject):
     error: pyqtSignal = pyqtSignal(Exception)
 
 
-class PlotterUI(Form_plotter):
-    class AsyncWorker(QRunnable):
-        def __init__(self, parent: 'PlotterUI', plotfunc):
-            super().__init__()
-            self.parent: PlotterUI = parent
-            self.mutex = QMutex()
-            self.signal = WorkerSignals()
-            self.plotfunc = plotfunc
+class AsyncWorker(QRunnable):
+    def __init__(self, parent: 'PlotterUI', working_function):
+        super().__init__()
+        self.parent: PlotterUI = parent
+        self.mutex = QMutex()
+        self.signal = WorkerSignals()
+        self.working_function = working_function
 
-        @pyqtSlot()
-        def run(self) -> None:
-            try:
-                with QMutexLocker(self.mutex):
-                    self.plotfunc()
-            except Exception as e:
-                self.signal.error.emit(e)
-                return
-            self.signal.finish.emit()
+    @pyqtSlot()
+    def run(self) -> None:
+        try:
+            with QMutexLocker(self.mutex):
+                self.working_function()
+        except Exception as e:
+            self.signal.error.emit(e)
+            return
+        self.signal.finish.emit()
+
+
+class PlotterUI(Form_plotter):
 
     def __init__(self, app, form):
         super().__init__()
         self.tempdir = tempfile.TemporaryDirectory(prefix="splatplost")
         self.RouteFile = None
         self.connection: NXWrapper | None = None
-        self.thread_pool = QThreadPool()
-        self.thread_pool.setMaxThreadCount(1)
+        self.thread_pool: QThreadPool = QThreadPool()
         self.app = app
         self.form = form
-        self.trans = QtCore.QTranslator()
+        self.trans: QtCore.QTranslator = QtCore.QTranslator()
+        self.current_key_binding = None
+
+        self.thread_pool.setMaxThreadCount(1)
 
     def __del__(self):
         self.tempdir.cleanup()
@@ -127,7 +130,7 @@ class PlotterUI(Form_plotter):
         if self.RouteFile is None:
             self.statusBar.showMessage(QApplication.translate("@default", "No file loaded"))
             return False
-        if self.splatoon_ver.currentText() not in ["Splatoon 2", "Splatoon 3"]:
+        if self.splatoon_ver.currentText() not in ["Splatoon 2", "Splatoon 3"] or self.current_key_binding is None:
             self.statusBar.showMessage(QApplication.translate("@default", "Splatoon version not selected"))
             return False
         if not self.switch_connected.isChecked() or self.connection is None:
@@ -136,6 +139,7 @@ class PlotterUI(Form_plotter):
         return True
 
     def start_pairing(self, success_callback, fail_callback):
+        # If we are already connected, hint the user.
         reconnect_confirm_dialog = QMessageBox()
         reconnect_confirm_dialog.setText(
                 QApplication.translate("@default",
@@ -146,6 +150,7 @@ class PlotterUI(Form_plotter):
         reconnect_confirm_dialog.setDefaultButton(QMessageBox.StandardButton.No)
         if self.connection is not None:
             if reconnect_confirm_dialog.exec() == QMessageBox.StandardButton.No:
+                success_callback()
                 return
             self.connection.disconnect()
             self.connection = None
@@ -162,7 +167,7 @@ class PlotterUI(Form_plotter):
                 self.connection = None
                 raise e
 
-        worker = self.AsyncWorker(self, pairing)
+        worker = AsyncWorker(self, pairing)
 
         worker.signal.finish.connect(lambda: (success_callback(), self.thread_pool.waitForDone()))
         worker.signal.error.connect(lambda e: (fail_callback(e), self.thread_pool.waitForDone()))
@@ -274,15 +279,14 @@ class PlotterUI(Form_plotter):
             return
 
         def draw_func():
-            splatoon_3 = self.splatoon_ver.currentText() == "Splatoon 3"
-
             partial_plot_with_conn(self.connection, self.RouteFile.blocks.items(),
                                    stable_mode=self.stable_mode.isChecked(),
-                                   clear_drawing=self.clear_drawing.isChecked(), splatoon3=splatoon_3,
+                                   clear_drawing=self.clear_drawing.isChecked(),
+                                   key_binding=self.current_key_binding,
                                    plot_blocks=self.RouteFile.get_selected_blocks()
                                    )
 
-        worker = self.AsyncWorker(self, draw_func)
+        worker = AsyncWorker(self, draw_func)
 
         self.draw_selected.setEnabled(False)
         self.erase_selected.setEnabled(False)
@@ -308,15 +312,14 @@ class PlotterUI(Form_plotter):
             return
 
         def draw_func():
-            splatoon_3 = self.splatoon_ver.currentText() == "Splatoon 3"
-
             partial_erase_with_conn(self.connection, self.RouteFile.blocks.items(),
                                     stable_mode=self.stable_mode.isChecked(),
-                                    clear_drawing=self.clear_drawing.isChecked(), splatoon3=splatoon_3,
+                                    clear_drawing=self.clear_drawing.isChecked(),
+                                    key_binding=self.current_key_binding,
                                     plot_blocks=self.RouteFile.get_selected_blocks()
                                     )
 
-        worker = self.AsyncWorker(self, draw_func)
+        worker = AsyncWorker(self, draw_func)
 
         self.draw_selected.setEnabled(False)
         self.erase_selected.setEnabled(False)
@@ -337,25 +340,23 @@ class PlotterUI(Form_plotter):
         worker.signal.error.connect(fail)
         self.thread_pool.start(worker)
 
-    def language_zhCN_clicked(self):
-        self.trans.load(str(Path(__file__).parent / "i18n" / "zh_CN.qm"))
+    def language_clicked(self, language_code: str) -> None:
+        """
+        Change the language of the application.
+
+        :param language_code: The language code to change to
+        """
+        self.trans.load(str(Path(__file__).parent / "i18n" / "{}.qm".format(language_code)))
         QtWidgets.QApplication.instance().installTranslator(self.trans)
         self.retranslateUi(self.form)
 
-    def language_enUS_clicked(self):
-        self.trans.load(str(Path(__file__).parent / "i18n" / "en_US.qm"))
-        QtWidgets.QApplication.instance().installTranslator(self.trans)
-        self.retranslateUi(self.form)
-
-    def language_jaJP_clicked(self):
-        self.trans.load(str(Path(__file__).parent / "i18n" / "ja_JP.qm"))
-        QtWidgets.QApplication.instance().installTranslator(self.trans)
-        self.retranslateUi(self.form)
-
-    def language_zhTW_clicked(self):
-        self.trans.load(str(Path(__file__).parent / "i18n" / "zh_TW.qm"))
-        QtWidgets.QApplication.instance().installTranslator(self.trans)
-        self.retranslateUi(self.form)
+    def splatoon_ver_changed(self, text: str):
+        if text == "Splatoon 3":
+            self.current_key_binding = Splatoon3KeyBinding()
+        elif text == "Splatoon 2":
+            self.current_key_binding = Splatoon2KeyBinding()
+        else:
+            return
 
     def retranslateUi(self, plotter):
         super().retranslateUi(plotter)
@@ -386,12 +387,13 @@ class PlotterUI(Form_plotter):
 
         # Splatoon version
         self.splatoon_ver.addItems(["Splatoon 2", "Splatoon 3"])
+        self.splatoon_ver.currentTextChanged.connect(self.splatoon_ver_changed)
 
         # Language
-        self.language_zhCN.triggered.connect(self.language_zhCN_clicked)
-        self.language_enUS.triggered.connect(self.language_enUS_clicked)
-        self.language_jaJP.triggered.connect(self.language_jaJP_clicked)
-        self.language_zhTW.triggered.connect(self.language_zhTW_clicked)
+        self.language_zhCN.triggered.connect(partial(self.language_clicked, "zh_CN"))
+        self.language_enUS.triggered.connect(partial(self.language_clicked, "en_US"))
+        self.language_jaJP.triggered.connect(partial(self.language_clicked, "ja_JP"))
+        self.language_zhTW.triggered.connect(partial(self.language_clicked, "zh_TW"))
 
 
 def main():

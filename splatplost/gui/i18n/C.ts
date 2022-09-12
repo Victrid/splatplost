@@ -4,80 +4,80 @@
   <context>
     <name>@default</name>
     <message>
-      <location filename="../plotter.py" line="55" />
+      <location filename="../plotter.py" line="52" />
       <source>Pairing...</source>
       <translation type="unfinished" />
     </message>
     <message>
-      <location filename="../plotter.py" line="65" />
+      <location filename="../plotter.py" line="62" />
       <source>Start Pairing</source>
       <translation type="unfinished" />
     </message>
     <message>
-      <location filename="../plotter.py" line="67" />
+      <location filename="../plotter.py" line="64" />
       <source>Permission Error (Run as root?)</source>
       <translation type="unfinished" />
     </message>
     <message>
-      <location filename="../plotter.py" line="68" />
+      <location filename="../plotter.py" line="65" />
       <source>Error when pairing</source>
       <translation type="unfinished" />
     </message>
     <message>
-      <location filename="../plotter.py" line="266" />
-      <location filename="../plotter.py" line="254" />
-      <location filename="../plotter.py" line="128" />
+      <location filename="../plotter.py" line="265" />
+      <location filename="../plotter.py" line="253" />
+      <location filename="../plotter.py" line="125" />
       <source>No file loaded</source>
       <translation type="unfinished" />
     </message>
     <message>
-      <location filename="../plotter.py" line="131" />
+      <location filename="../plotter.py" line="128" />
       <source>Splatoon version not selected</source>
       <translation type="unfinished" />
     </message>
     <message>
-      <location filename="../plotter.py" line="134" />
+      <location filename="../plotter.py" line="131" />
       <source>Not connected to switch</source>
       <translation type="unfinished" />
     </message>
     <message>
-      <location filename="../plotter.py" line="141" />
+      <location filename="../plotter.py" line="139" />
       <source>The switch seems to be connected. Are you sure you want to reconnect?</source>
       <translation type="unfinished" />
     </message>
     <message>
-      <location filename="../plotter.py" line="202" />
+      <location filename="../plotter.py" line="201" />
       <source>Error when loading image</source>
       <translation type="unfinished" />
     </message>
     <message>
-      <location filename="../plotter.py" line="213" />
+      <location filename="../plotter.py" line="212" />
       <source>Error when reading file</source>
       <translation type="unfinished" />
     </message>
     <message>
-      <location filename="../plotter.py" line="223" />
+      <location filename="../plotter.py" line="222" />
       <source>File read successfully</source>
       <translation type="unfinished" />
     </message>
     <message>
-      <location filename="../plotter.py" line="327" />
-      <location filename="../plotter.py" line="293" />
+      <location filename="../plotter.py" line="326" />
+      <location filename="../plotter.py" line="292" />
       <source>Drawing finished</source>
       <translation type="unfinished" />
     </message>
     <message>
-      <location filename="../plotter.py" line="299" />
+      <location filename="../plotter.py" line="298" />
       <source>ERROR: {}</source>
       <translation type="unfinished" />
     </message>
     <message>
-      <location filename="../plotter.py" line="333" />
+      <location filename="../plotter.py" line="332" />
       <source>Error when drawing</source>
       <translation type="unfinished" />
     </message>
     <message>
-      <location filename="../plotter.py" line="363" />
+      <location filename="../plotter.py" line="362" />
       <source>**Splatplost version {}**</source>
       <translation type="unfinished" />
     </message>
@@ -111,7 +111,11 @@
     </message>
     <message>
       <location filename="../connect_to_switch.ui" line="0" />
-      <source>Go to Post and click "Done". If you need to select the controller use "Press A"</source>
+      <source>- Go to Post
+- Select smallest brush (by touch?)
+- Click "Done". 
+
+If you need to select the controller use "Press A".</source>
       <translation type="unfinished" />
     </message>
     <message>
@@ -215,6 +219,11 @@
     </message>
     <message>
       <location filename="../plotter.ui" line="0" />
+      <source>After you reselected your Splatoon version, you need to change your brush to minimum.</source>
+      <translation type="unfinished" />
+    </message>
+    <message>
+      <location filename="../plotter.ui" line="0" />
       <source>Clear Drawing</source>
       <translation type="unfinished" />
     </message>
@@ -226,31 +235,6 @@
     <message>
       <location filename="../plotter.ui" line="0" />
       <source>Information</source>
-      <translation type="unfinished" />
-    </message>
-    <message>
-      <location filename="../plotter.ui" line="0" />
-      <source>Language</source>
-      <translation type="unfinished" />
-    </message>
-    <message>
-      <location filename="../plotter.ui" line="0" />
-      <source>繁體中文</source>
-      <translation type="unfinished" />
-    </message>
-    <message>
-      <location filename="../plotter.ui" line="0" />
-      <source>简体中文</source>
-      <translation type="unfinished" />
-    </message>
-    <message>
-      <location filename="../plotter.ui" line="0" />
-      <source>日本語</source>
-      <translation type="unfinished" />
-    </message>
-    <message>
-      <location filename="../plotter.ui" line="0" />
-      <source>English</source>
       <translation type="unfinished" />
     </message>
   </context>

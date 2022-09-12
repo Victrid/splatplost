@@ -382,6 +382,16 @@
        </widget>
       </item>
       <item>
+       <widget class="QLabel" name="label_2">
+        <property name="text">
+         <string>After you reselected your Splatoon version, you need to change your brush to minimum.</string>
+        </property>
+        <property name="wordWrap">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
        <widget class="QCheckBox" name="clear_drawing">
         <property name="text">
          <string>Clear Drawing</string>
@@ -440,7 +450,7 @@
    </property>
    <widget class="QMenu" name="menuLanguage">
     <property name="title">
-     <string>Language</string>
+     <string notr="true">Language</string>
     </property>
     <addaction name="language_enUS"/>
     <addaction name="language_jaJP"/>
@@ -451,22 +461,22 @@
   </widget>
   <action name="language_zhTW">
    <property name="text">
-    <string>繁體中文</string>
+    <string notr="true">繁體中文</string>
    </property>
   </action>
   <action name="language_zhCN">
    <property name="text">
-    <string>简体中文</string>
+    <string notr="true">简体中文</string>
    </property>
   </action>
   <action name="language_jaJP">
    <property name="text">
-    <string>日本語</string>
+    <string notr="true">日本語</string>
    </property>
   </action>
   <action name="language_enUS">
    <property name="text">
-    <string>English</string>
+    <string notr="true">English</string>
    </property>
   </action>
  </widget>

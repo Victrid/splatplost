@@ -223,60 +223,65 @@ def partial_erase(order_file: str, backend: Type[NXWrapper], delay_ms: int = 100
             break
         connection.button_press(Button.A)
 
-    partial_plot_with_conn(connection, content, stable_mode, clear_drawing, splatoon3, plot_blocks)
+    key_binding = Splatoon3KeyBinding() if splatoon3 else Splatoon2KeyBinding()
+
+    partial_plot_with_conn(connection, content, key_binding, stable_mode, clear_drawing, plot_blocks)
 
     connection.disconnect()
 
 
-def partial_erase_with_conn(connection: NXWrapper, blocks,
-                            stable_mode: bool = False, clear_drawing: bool = False, splatoon3: bool = False,
+def partial_erase_with_conn(connection: NXWrapper, blocks, key_binding: KeyBinding,
+                            stable_mode: bool = False, clear_drawing: bool = False,
                             plot_blocks: list[int] = None) -> None:
     """
     Clean blocks.
 
     :param connection: The connection to the Switch.
     :param blocks: The blocks to plot.
+    :param key_binding: The key binding.
     :param stable_mode: Whether to use stable mode.
     :param clear_drawing: Whether to clear the plot before plotting.
     :param splatoon3: Whether to use Splatoon 3 mode.
     :param plot_blocks: The blocks to plot.
     """
-    keyBinding = Splatoon3KeyBinding() if splatoon3 else Splatoon2KeyBinding()
 
     # Goto (0,0) point
     command_list, current_position = reset_cursor_position((0, 0), (0, 0))
     # Press clear button
     if clear_drawing:
-        command_list += keyBinding.clear()
+        command_list += key_binding.clear()
+        # If clear button is pressed, we don't need to continue to erasing.
+        execute_command_list(command_list, connection, stable_mode=stable_mode)
+        return
 
     # Execute
     execute_command_list(command_list, connection, stable_mode=stable_mode)
 
     # Start plotting
+    horizontal_divider = blocks["horizontal_divider"]
+    vertical_divider = blocks["vertical_divider"]
 
-    for block_name, block in blocks.items():
-        if int(block_name) not in plot_blocks:
-            continue
-        command_list, current_position = erase_block(int(block_name), current_position, blocks["vertical_divider"],
-                                                     blocks["horizontal_divider"], keyBinding
+    for index in plot_blocks:
+        command_list, current_position = erase_block(block_index=index, position=current_position,
+                                                     horizontal_divider=horizontal_divider,
+                                                     vertical_divider=vertical_divider, keyBinding=key_binding
                                                      )
         execute_command_list(command_list, connection, stable_mode=stable_mode)
 
 
-def partial_plot_with_conn(connection: NXWrapper, blocks,
-                           stable_mode: bool = False, clear_drawing: bool = False, splatoon3: bool = False,
+def partial_plot_with_conn(connection: NXWrapper, blocks, key_binding: KeyBinding,
+                           stable_mode: bool = False, clear_drawing: bool = False,
                            plot_blocks: list[int] = None) -> None:
     """
     Plot blocks.
 
     :param connection: The connection to the Switch.
     :param blocks: The blocks scheme.
+    :param key_binding: The key binding.
     :param stable_mode: Whether to use stable mode.
     :param clear_drawing: Whether to clear the plot before plotting.
-    :param splatoon3: Whether to use Splatoon 3 mode.
     :param plot_blocks: The blocks to plot.
     """
-    key_binding = Splatoon3KeyBinding() if splatoon3 else Splatoon2KeyBinding()
     # Goto (0,0) point
     command_list, current_position = reset_cursor_position((0, 0), (0, 0))
     # Press clear button
@@ -348,7 +353,7 @@ def partial_plot(order_file: str, backend: Type[NXWrapper], delay_ms: int = 100,
                            blocks=content["blocks"].items(),
                            stable_mode=stable_mode,
                            clear_drawing=clear_drawing,
-                           splatoon3=splatoon3,
+                           key_binding=Splatoon3KeyBinding() if splatoon3 else Splatoon2KeyBinding(),
                            plot_blocks=plot_blocks
                            )
     connection.disconnect()

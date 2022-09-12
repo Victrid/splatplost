@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>414</width>
-    <height>243</height>
+    <width>486</width>
+    <height>310</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -104,6 +104,9 @@
         <property name="text">
          <string>2</string>
         </property>
+        <property name="textFormat">
+         <enum>Qt::PlainText</enum>
+        </property>
         <property name="alignment">
          <set>Qt::AlignCenter</set>
         </property>
@@ -112,7 +115,14 @@
       <item>
        <widget class="QLabel" name="label_4">
         <property name="text">
-         <string>Go to Post and click &quot;Done&quot;. If you need to select the controller use &quot;Press A&quot;</string>
+         <string>- Go to Post
+- Select smallest brush (by touch?)
+- Click &quot;Done&quot;. 
+
+If you need to select the controller use &quot;Press A&quot;.</string>
+        </property>
+        <property name="textFormat">
+         <enum>Qt::MarkdownText</enum>
         </property>
         <property name="scaledContents">
          <bool>true</bool>
