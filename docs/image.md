@@ -25,6 +25,8 @@ After booting, you should see a desktop environment with an icon "Konsole" on it
 
 Run `install_splatplost` in the terminal, and after that everything should be ready. Continue to "Use" section on readme.md.
 
+If you've been accidentally locked out, the username `splatplost` has the password `splatplost`.
+
 Notice: the image will not try read/write your local disk and to do so needs some Linux tricks. If you're not familiar with Linux, please store your art in some netdisk, and retrieve them with Firefox browser installed on the image.
 
 ## Create image locally (Only for Linux Guru)
