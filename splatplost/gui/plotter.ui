@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>619</width>
-    <height>457</height>
+    <height>529</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -61,6 +61,39 @@
          <widget class="QPushButton" name="read_file">
           <property name="text">
            <string>Load</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" name="LoadEmptyLayout">
+        <property name="leftMargin">
+         <number>6</number>
+        </property>
+        <property name="topMargin">
+         <number>6</number>
+        </property>
+        <property name="rightMargin">
+         <number>6</number>
+        </property>
+        <property name="bottomMargin">
+         <number>6</number>
+        </property>
+        <item>
+         <widget class="QLabel" name="label_5">
+          <property name="text">
+           <string>Only erasing?</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="load_white">
+          <property name="text">
+           <string>Load an Empty Image</string>
           </property>
          </widget>
         </item>

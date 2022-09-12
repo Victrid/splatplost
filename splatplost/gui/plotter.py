@@ -3,6 +3,7 @@ import tempfile
 from functools import partial
 from pathlib import Path
 
+import PIL
 from PIL import Image, ImageQt
 from PyQt6 import QtCore, QtWidgets
 from PyQt6.QtCore import QLocale, QMutex, QMutexLocker, QObject, QRunnable, QThreadPool, Qt, \
@@ -13,6 +14,7 @@ from libnxctrl.bluetooth import get_backend
 from libnxctrl.wrapper import Button, NXWrapper
 
 from splatplost.generate_route import generate_route_file
+from splatplost.gui.bugreport_ui import BugReportDialog
 from splatplost.gui.connect_to_switch_ui import Form_ConnectToSwitch
 from splatplost.gui.plotter_ui import Form_plotter
 from splatplost.keybindings import Splatoon2KeyBinding, Splatoon3KeyBinding
@@ -39,8 +41,20 @@ def spawn_error_dialog(error: Exception, description: str) -> int:
                                 error.__class__.__name__, error.what() if hasattr(error, "what") else str(error)
                                 )
                    )
+    dialog.setWindowTitle(tr("@default", "Error happened"))
     dialog.setTextFormat(Qt.TextFormat.MarkdownText)
-    return dialog.exec()
+    dialog.setStandardButtons(QtWidgets.QMessageBox.StandardButton.Ok | QtWidgets.QMessageBox.StandardButton.Help)
+    dialog.setDefaultButton(QtWidgets.QMessageBox.StandardButton.Ok)
+    result = dialog.exec()
+
+    if result == QMessageBox.StandardButton.Help:
+        ui = BugReportDialog(error)
+        dialog = QDialog()
+        ui.setupUi(dialog)
+        dialog.exec()
+        result = QMessageBox.StandardButton.Ok
+
+    return result
 
 
 class ConnectToSwitchUI(Form_ConnectToSwitch):
@@ -227,6 +241,12 @@ class PlotterUI(Form_plotter):
         self.progress.setValue(100)
         self.statusBar.showMessage(QApplication.translate("@default", "File read successfully"))
 
+    def load_white_clicked(self):
+        image = PIL.Image.new("RGB", (320, 120), (255, 255, 255))
+        image.save(f"{self.tempdir.name}/white.png")
+        self.file_loc.setText(f"{self.tempdir.name}/white.png")
+        self.read_file_clicked()
+
     def image_clicked(self, event: QMouseEvent) -> None:
         """
         Handles the click event on the image, update the selected blocks.
@@ -369,6 +389,7 @@ class PlotterUI(Form_plotter):
         # File loading
         self.open_file.clicked.connect(self.open_file_clicked)
         self.read_file.clicked.connect(self.read_file_clicked)
+        self.load_white.clicked.connect(self.load_white_clicked)
 
         # Pixel clicking
         self.image.mousePressEvent = self.image_clicked
@@ -379,7 +400,7 @@ class PlotterUI(Form_plotter):
 
         # Drawing
         self.draw_selected.clicked.connect(self.draw_selected_clicked)
-        self.erase_selected.clicked.connect(self.draw_selected_clicked)
+        self.erase_selected.clicked.connect(self.erase_selected_clicked)
 
         # Connection
         self.switch_connected.setChecked(False)

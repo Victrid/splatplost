@@ -4,86 +4,111 @@
 <context>
     <name>@default</name>
     <message>
-        <location filename="../plotter.py" line="52"/>
+        <location filename="../plotter.py" line="68"/>
         <source>Pairing...</source>
         <translation>配對中......</translation>
     </message>
     <message>
-        <location filename="../plotter.py" line="62"/>
+        <location filename="../plotter.py" line="78"/>
         <source>Start Pairing</source>
         <translation>開始配對</translation>
     </message>
     <message>
-        <location filename="../plotter.py" line="64"/>
+        <location filename="../plotter.py" line="80"/>
         <source>Permission Error (Run as root?)</source>
         <translation>權限錯誤（是否以root權限運行？）</translation>
     </message>
     <message>
-        <location filename="../plotter.py" line="65"/>
+        <location filename="../plotter.py" line="81"/>
         <source>Error when pairing</source>
         <translation>配對時發生錯誤</translation>
     </message>
     <message>
-        <location filename="../plotter.py" line="265"/>
-        <location filename="../plotter.py" line="253"/>
-        <location filename="../plotter.py" line="125"/>
+        <location filename="../plotter.py" line="291"/>
+        <location filename="../plotter.py" line="279"/>
+        <location filename="../plotter.py" line="145"/>
         <source>No file loaded</source>
         <translation>沒有載入檔案</translation>
     </message>
     <message>
-        <location filename="../plotter.py" line="128"/>
+        <location filename="../plotter.py" line="148"/>
         <source>Splatoon version not selected</source>
         <translation>沒有選擇Splatoon版本</translation>
     </message>
     <message>
-        <location filename="../plotter.py" line="131"/>
+        <location filename="../plotter.py" line="151"/>
         <source>Not connected to switch</source>
         <translation>沒有連接到Switch</translation>
     </message>
     <message>
-        <location filename="../plotter.py" line="139"/>
+        <location filename="../plotter.py" line="159"/>
         <source>The switch seems to be connected. Are you sure you want to reconnect?</source>
         <translation>Switch可能已經連接了。確定要重新連接嗎？</translation>
     </message>
     <message>
-        <location filename="../plotter.py" line="201"/>
+        <location filename="../plotter.py" line="221"/>
         <source>Error when loading image</source>
         <translation>載入圖像時發生錯誤</translation>
     </message>
     <message>
-        <location filename="../plotter.py" line="212"/>
+        <location filename="../plotter.py" line="232"/>
         <source>Error when reading file</source>
         <translation>讀取檔案時發生錯誤</translation>
     </message>
     <message>
-        <location filename="../plotter.py" line="222"/>
+        <location filename="../plotter.py" line="242"/>
         <source>File read successfully</source>
         <translation>檔案讀取成功</translation>
     </message>
     <message>
-        <location filename="../plotter.py" line="326"/>
-        <location filename="../plotter.py" line="292"/>
+        <location filename="../plotter.py" line="350"/>
+        <location filename="../plotter.py" line="317"/>
         <source>Drawing finished</source>
         <translation>畫圖完成</translation>
     </message>
     <message>
-        <location filename="../plotter.py" line="298"/>
+        <location filename="../plotter.py" line="323"/>
         <source>ERROR: {}</source>
         <translation>錯誤：{}</translation>
     </message>
     <message>
-        <location filename="../plotter.py" line="332"/>
+        <location filename="../plotter.py" line="356"/>
         <source>Error when drawing</source>
         <translation>繪圖時發生錯誤</translation>
     </message>
     <message>
-        <location filename="../plotter.py" line="362"/>
+        <location filename="../plotter.py" line="384"/>
         <source>**Splatplost version {}**</source>
         <translation>**Splatplost 版本{}**</translation>
     </message>
 </context>
 <context>
     <name>Dialog</name>
+    <message>
+        <location filename="../bugreport.ui" line="0"/>
+        <source>Bug Report</source>
+        <translation>錯誤報告</translation>
+    </message>
+    <message>
+        <location filename="../bugreport.ui" line="0"/>
+        <source>Bug Report in Markdown format:</source>
+        <translation>Markdown 格式的錯誤報告：</translation>
+    </message>
+    <message>
+        <location filename="../bugreport.ui" line="0"/>
+        <source>Save to File</source>
+        <translation>保存到檔案</translation>
+    </message>
+    <message>
+        <location filename="../bugreport.ui" line="0"/>
+        <source>Copy to Clipboard</source>
+        <translation>複製到剪貼板</translation>
+    </message>
+    <message>
+        <location filename="../bugreport.ui" line="0"/>
+        <source>Open an Issue</source>
+        <translation>打開一個Issue</translation>
+    </message>
     <message>
         <location filename="../connect_to_switch.ui" line="0"/>
         <source>Connect to Switch</source>
@@ -158,6 +183,16 @@ If you need to select the controller use &quot;Press A&quot;.</source>
         <location filename="../plotter.ui" line="0"/>
         <source>Load</source>
         <translation>載入</translation>
+    </message>
+    <message>
+        <location filename="../plotter.ui" line="0"/>
+        <source>Only erasing?</source>
+        <translation>僅僅是擦除？</translation>
+    </message>
+    <message>
+        <location filename="../plotter.ui" line="0"/>
+        <source>Load an Empty Image</source>
+        <translation>加載空圖像</translation>
     </message>
     <message>
         <location filename="../plotter.ui" line="0"/>

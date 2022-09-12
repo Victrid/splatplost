@@ -4,86 +4,111 @@
 <context>
     <name>@default</name>
     <message>
-        <location filename="../plotter.py" line="52"/>
+        <location filename="../plotter.py" line="68"/>
         <source>Pairing...</source>
         <translation>Pairing...</translation>
     </message>
     <message>
-        <location filename="../plotter.py" line="62"/>
+        <location filename="../plotter.py" line="78"/>
         <source>Start Pairing</source>
         <translation>Start Pairing</translation>
     </message>
     <message>
-        <location filename="../plotter.py" line="64"/>
+        <location filename="../plotter.py" line="80"/>
         <source>Permission Error (Run as root?)</source>
         <translation>Permission Error (Run as root?)</translation>
     </message>
     <message>
-        <location filename="../plotter.py" line="65"/>
+        <location filename="../plotter.py" line="81"/>
         <source>Error when pairing</source>
         <translation>Error when pairing</translation>
     </message>
     <message>
-        <location filename="../plotter.py" line="265"/>
-        <location filename="../plotter.py" line="253"/>
-        <location filename="../plotter.py" line="125"/>
+        <location filename="../plotter.py" line="291"/>
+        <location filename="../plotter.py" line="279"/>
+        <location filename="../plotter.py" line="145"/>
         <source>No file loaded</source>
         <translation>No file loaded</translation>
     </message>
     <message>
-        <location filename="../plotter.py" line="128"/>
+        <location filename="../plotter.py" line="148"/>
         <source>Splatoon version not selected</source>
         <translation>Splatoon version not selected</translation>
     </message>
     <message>
-        <location filename="../plotter.py" line="131"/>
+        <location filename="../plotter.py" line="151"/>
         <source>Not connected to switch</source>
         <translation>Not connected to switch</translation>
     </message>
     <message>
-        <location filename="../plotter.py" line="139"/>
+        <location filename="../plotter.py" line="159"/>
         <source>The switch seems to be connected. Are you sure you want to reconnect?</source>
         <translation>The switch seems to be connected. Are you sure you want to reconnect?</translation>
     </message>
     <message>
-        <location filename="../plotter.py" line="201"/>
+        <location filename="../plotter.py" line="221"/>
         <source>Error when loading image</source>
         <translation>Error when loading image</translation>
     </message>
     <message>
-        <location filename="../plotter.py" line="212"/>
+        <location filename="../plotter.py" line="232"/>
         <source>Error when reading file</source>
         <translation>Error when reading file</translation>
     </message>
     <message>
-        <location filename="../plotter.py" line="222"/>
+        <location filename="../plotter.py" line="242"/>
         <source>File read successfully</source>
         <translation>File read successfully</translation>
     </message>
     <message>
-        <location filename="../plotter.py" line="326"/>
-        <location filename="../plotter.py" line="292"/>
+        <location filename="../plotter.py" line="350"/>
+        <location filename="../plotter.py" line="317"/>
         <source>Drawing finished</source>
         <translation>Drawing finished</translation>
     </message>
     <message>
-        <location filename="../plotter.py" line="298"/>
+        <location filename="../plotter.py" line="323"/>
         <source>ERROR: {}</source>
         <translation>ERROR: {}</translation>
     </message>
     <message>
-        <location filename="../plotter.py" line="332"/>
+        <location filename="../plotter.py" line="356"/>
         <source>Error when drawing</source>
         <translation>Error when drawing</translation>
     </message>
     <message>
-        <location filename="../plotter.py" line="362"/>
+        <location filename="../plotter.py" line="384"/>
         <source>**Splatplost version {}**</source>
         <translation>**Splatplost version {}**</translation>
     </message>
 </context>
 <context>
     <name>Dialog</name>
+    <message>
+        <location filename="../bugreport.ui" line="0"/>
+        <source>Bug Report</source>
+        <translation>Bug Report</translation>
+    </message>
+    <message>
+        <location filename="../bugreport.ui" line="0"/>
+        <source>Bug Report in Markdown format:</source>
+        <translation>Bug Report in Markdown format:</translation>
+    </message>
+    <message>
+        <location filename="../bugreport.ui" line="0"/>
+        <source>Save to File</source>
+        <translation>Save to File</translation>
+    </message>
+    <message>
+        <location filename="../bugreport.ui" line="0"/>
+        <source>Copy to Clipboard</source>
+        <translation>Copy to Clipboard</translation>
+    </message>
+    <message>
+        <location filename="../bugreport.ui" line="0"/>
+        <source>Open an Issue</source>
+        <translation>Open an Issue</translation>
+    </message>
     <message>
         <location filename="../connect_to_switch.ui" line="0"/>
         <source>Connect to Switch</source>
@@ -158,6 +183,16 @@ If you need to select the controller use &quot;Press A&quot;.</translation>
         <location filename="../plotter.ui" line="0"/>
         <source>Load</source>
         <translation>Load</translation>
+    </message>
+    <message>
+        <location filename="../plotter.ui" line="0"/>
+        <source>Only erasing?</source>
+        <translation>Only erasing?</translation>
+    </message>
+    <message>
+        <location filename="../plotter.ui" line="0"/>
+        <source>Load an Empty Image</source>
+        <translation>Load an Empty Image</translation>
     </message>
     <message>
         <location filename="../plotter.ui" line="0"/>

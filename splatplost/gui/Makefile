@@ -1,4 +1,5 @@
 update_translation:
+	rm -f i18n/C.ts
 	pylupdate6 ./*.py ./*.ui --ts i18n/C.ts
 	pylupdate6 ./*.py ./*.ui --ts i18n/zh_CN.ts
 	pylupdate6 ./*.py ./*.ui --ts i18n/zh_TW.ts
