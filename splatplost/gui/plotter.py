@@ -22,15 +22,14 @@ from splatplost.plot import partial_erase_with_conn, partial_plot_with_conn
 from splatplost.route_handler import RouteFile
 from splatplost.version import __version__
 
-tr = QApplication.translate
 
-
-def spawn_error_dialog(error: Exception, description: str) -> int:
+def spawn_error_dialog(error: Exception, description: str, reportable: bool = True) -> int:
     """
     Create a dialog to show error message.
 
     :param error: The error object.
     :param description: The description of the error.
+    :param reportable: Whether to allow user to report the error.
     """
     dialog = QtWidgets.QMessageBox()
     dialog.setText("**{}**\n\n"
@@ -41,20 +40,25 @@ def spawn_error_dialog(error: Exception, description: str) -> int:
                                 error.__class__.__name__, error.what() if hasattr(error, "what") else str(error)
                                 )
                    )
-    dialog.setWindowTitle(tr("@default", "Error happened"))
+    dialog.setWindowTitle(QApplication.translate("@default", "Error happened"))
     dialog.setTextFormat(Qt.TextFormat.MarkdownText)
-    dialog.setStandardButtons(QtWidgets.QMessageBox.StandardButton.Ok | QtWidgets.QMessageBox.StandardButton.Help)
-    dialog.setDefaultButton(QtWidgets.QMessageBox.StandardButton.Ok)
-    result = dialog.exec()
+    if reportable:
+        dialog.setStandardButtons(QtWidgets.QMessageBox.StandardButton.Ok | QtWidgets.QMessageBox.StandardButton.Help)
+        dialog.setDefaultButton(QtWidgets.QMessageBox.StandardButton.Ok)
+        result = dialog.exec()
 
-    if result == QMessageBox.StandardButton.Help:
-        ui = BugReportDialog(error)
-        dialog = QDialog()
-        ui.setupUi(dialog)
-        dialog.exec()
-        result = QMessageBox.StandardButton.Ok
+        if result == QMessageBox.StandardButton.Help:
+            ui = BugReportDialog(error)
+            dialog = QDialog()
+            ui.setupUi(dialog)
+            dialog.exec()
+            result = QMessageBox.StandardButton.Ok
 
-    return result
+        return result
+    else:
+        dialog.setStandardButtons(QtWidgets.QMessageBox.StandardButton.Ok)
+        dialog.setDefaultButton(QtWidgets.QMessageBox.StandardButton.Ok)
+        return dialog.exec()
 
 
 class ConnectToSwitchUI(Form_ConnectToSwitch):
@@ -77,7 +81,9 @@ class ConnectToSwitchUI(Form_ConnectToSwitch):
         self.start_pairing.setEnabled(True)
         self.start_pairing.setText(QApplication.translate("@default", "Start Pairing"))
         if isinstance(err, PermissionError):
-            return spawn_error_dialog(err, QApplication.translate("@default", "Permission Error (Run as root?)"))
+            return spawn_error_dialog(err, QApplication.translate("@default", "Permission Error (Run as root?)"),
+                                      reportable=False
+                                      )
         return spawn_error_dialog(err, QApplication.translate("@default", "Error when pairing"))
 
     def done_clicked(self):
@@ -142,13 +148,22 @@ class PlotterUI(Form_plotter):
 
     def __validate_before_drawing(self) -> bool:
         if self.RouteFile is None:
-            self.statusBar.showMessage(QApplication.translate("@default", "No file loaded"))
+            spawn_error_dialog(ValueError(QApplication.translate("@default", "No file loaded")),
+                               QApplication.translate("@default", "No file loaded"),
+                               reportable=False
+                               )
             return False
         if self.splatoon_ver.currentText() not in ["Splatoon 2", "Splatoon 3"] or self.current_key_binding is None:
-            self.statusBar.showMessage(QApplication.translate("@default", "Splatoon version not selected"))
+            spawn_error_dialog(ValueError(QApplication.translate("@default", "Splatoon version not selected")),
+                               QApplication.translate("@default", "Splatoon version not selected"),
+                               reportable=False
+                               )
             return False
         if not self.switch_connected.isChecked() or self.connection is None:
-            self.statusBar.showMessage(QApplication.translate("@default", "Not connected to switch"))
+            spawn_error_dialog(ValueError(QApplication.translate("@default", "Switch not connected")),
+                               QApplication.translate("@default", "Switch not connected"),
+                               reportable=False
+                               )
             return False
         return True
 
@@ -224,7 +239,11 @@ class PlotterUI(Form_plotter):
     def read_file_clicked(self):
         try:
             if self.file_loc.text() == "":
-                raise FileNotFoundError("No file selected")
+                spawn_error_dialog(ValueError(QApplication.translate("@default", "No file loaded")),
+                                   QApplication.translate("@default", "No file loaded"),
+                                   reportable=False
+                                   )
+                return
             generate_route_file(self.file_loc.text(), f"{self.tempdir.name}/plot_file.json")
         except Exception as e:
             self.progress.setValue(0)
@@ -276,7 +295,9 @@ class PlotterUI(Form_plotter):
 
         """
         if self.RouteFile is None:
-            self.statusBar.showMessage(QApplication.translate("@default", "No file loaded"))
+            spawn_error_dialog(FileNotFoundError(), QApplication.translate("@default", "No file loaded"),
+                               reportable=False
+                               )
             return
         self.RouteFile.select_all_blocks()
         image = self.RouteFile.generate_image_of_selected()
@@ -288,7 +309,9 @@ class PlotterUI(Form_plotter):
 
         """
         if self.RouteFile is None:
-            self.statusBar.showMessage(QApplication.translate("@default", "No file loaded"))
+            spawn_error_dialog(FileNotFoundError(), QApplication.translate("@default", "No file loaded"),
+                               reportable=False
+                               )
             return
         self.RouteFile.deselect_all_blocks()
         image = self.RouteFile.generate_image_of_selected()
@@ -317,10 +340,10 @@ class PlotterUI(Form_plotter):
             self.statusBar.showMessage(QApplication.translate("@default", "Drawing finished"))
             self.thread_pool.waitForDone()
 
-        def fail(e: str):
+        def fail(e: Exception):
             self.draw_selected.setEnabled(True)
             self.erase_selected.setEnabled(True)
-            self.statusBar.showMessage(QApplication.translate("@default", "ERROR: {}").format(e))
+            spawn_error_dialog(e, QApplication.translate("@default", "Error when drawing"))
             self.thread_pool.waitForDone()
 
         worker.signal.finish.connect(success)
@@ -332,7 +355,9 @@ class PlotterUI(Form_plotter):
             return
 
         def draw_func():
-            partial_erase_with_conn(self.connection, self.RouteFile.blocks.items(),
+            partial_erase_with_conn(self.connection,
+                                    horizontal_divider=self.RouteFile.horizontal_divider,
+                                    vertical_divider=self.RouteFile.vertical_divider,
                                     stable_mode=self.stable_mode.isChecked(),
                                     clear_drawing=self.clear_drawing.isChecked(),
                                     key_binding=self.current_key_binding,
@@ -353,7 +378,7 @@ class PlotterUI(Form_plotter):
         def fail(e: Exception):
             self.draw_selected.setEnabled(True)
             self.erase_selected.setEnabled(True)
-            spawn_error_dialog(e, QApplication.translate("@default", "Error when drawing"))
+            spawn_error_dialog(e, QApplication.translate("@default", "Error when erasing"))
             self.thread_pool.waitForDone()
 
         worker.signal.finish.connect(success)

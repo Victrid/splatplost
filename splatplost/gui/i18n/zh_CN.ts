@@ -4,82 +4,100 @@
 <context>
     <name>@default</name>
     <message>
-        <location filename="../plotter.py" line="68"/>
+        <location filename="../plotter.py" line="43"/>
+        <source>Error happened</source>
+        <translation>发生错误</translation>
+    </message>
+    <message>
+        <location filename="../plotter.py" line="72"/>
         <source>Pairing...</source>
         <translation>配对中......</translation>
     </message>
     <message>
-        <location filename="../plotter.py" line="78"/>
+        <location filename="../plotter.py" line="82"/>
         <source>Start Pairing</source>
         <translation>开始配对</translation>
     </message>
     <message>
-        <location filename="../plotter.py" line="80"/>
+        <location filename="../plotter.py" line="84"/>
         <source>Permission Error (Run as root?)</source>
         <translation>权限错误（是否以root权限运行？）</translation>
     </message>
     <message>
-        <location filename="../plotter.py" line="81"/>
+        <location filename="../plotter.py" line="87"/>
         <source>Error when pairing</source>
         <translation>配对时发生错误</translation>
     </message>
     <message>
-        <location filename="../plotter.py" line="291"/>
-        <location filename="../plotter.py" line="279"/>
-        <location filename="../plotter.py" line="145"/>
+        <location filename="../plotter.py" line="312"/>
+        <location filename="../plotter.py" line="298"/>
+        <location filename="../plotter.py" line="243"/>
+        <location filename="../plotter.py" line="242"/>
+        <location filename="../plotter.py" line="152"/>
+        <location filename="../plotter.py" line="151"/>
         <source>No file loaded</source>
         <translation>没有加载文件</translation>
     </message>
     <message>
-        <location filename="../plotter.py" line="148"/>
+        <location filename="../plotter.py" line="158"/>
+        <location filename="../plotter.py" line="157"/>
         <source>Splatoon version not selected</source>
         <translation>没有选择Splatoon版本</translation>
     </message>
     <message>
-        <location filename="../plotter.py" line="151"/>
-        <source>Not connected to switch</source>
-        <translation>没有连接到Switch</translation>
+        <location filename="../plotter.py" line="164"/>
+        <location filename="../plotter.py" line="163"/>
+        <source>Switch not connected</source>
+        <translation>Switch没有连接</translation>
     </message>
     <message>
-        <location filename="../plotter.py" line="159"/>
+        <location filename="../plotter.py" line="174"/>
         <source>The switch seems to be connected. Are you sure you want to reconnect?</source>
         <translation>Switch可能已经连接了。确定要重新连接吗？</translation>
     </message>
     <message>
-        <location filename="../plotter.py" line="221"/>
+        <location filename="../plotter.py" line="236"/>
         <source>Error when loading image</source>
         <translation>加载图像时发生错误</translation>
     </message>
     <message>
-        <location filename="../plotter.py" line="232"/>
+        <location filename="../plotter.py" line="251"/>
         <source>Error when reading file</source>
         <translation>读取文件时发生错误</translation>
     </message>
     <message>
-        <location filename="../plotter.py" line="242"/>
+        <location filename="../plotter.py" line="261"/>
         <source>File read successfully</source>
         <translation>文件读取成功</translation>
     </message>
     <message>
-        <location filename="../plotter.py" line="350"/>
-        <location filename="../plotter.py" line="317"/>
+        <location filename="../plotter.py" line="375"/>
+        <location filename="../plotter.py" line="340"/>
         <source>Drawing finished</source>
         <translation>画图完成</translation>
     </message>
     <message>
-        <location filename="../plotter.py" line="323"/>
-        <source>ERROR: {}</source>
-        <translation>错误：{}</translation>
-    </message>
-    <message>
-        <location filename="../plotter.py" line="356"/>
+        <location filename="../plotter.py" line="346"/>
         <source>Error when drawing</source>
         <translation>绘图时发生错误</translation>
     </message>
     <message>
-        <location filename="../plotter.py" line="384"/>
+        <location filename="../plotter.py" line="381"/>
+        <source>Error when erasing</source>
+        <translation>擦除时发生错误</translation>
+    </message>
+    <message>
+        <location filename="../plotter.py" line="409"/>
         <source>**Splatplost version {}**</source>
         <translation>**Splatplost 版本{}**</translation>
+    </message>
+    <message>
+        <source>Not connected to switch</source>
+        <translation type="vanished">没有连接到Switch</translation>
+    </message>
+    <message>
+        <source>ERROR: {}</source>
+        <translation type="vanished">错误：{}</translation>
     </message>
 </context>
 <context>

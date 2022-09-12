@@ -84,13 +84,13 @@ class RouteFile:
             # Alter the image to red
             for i in range(left_up_corner[0], right_down_corner[0]):
                 for j in range(left_up_corner[1], right_down_corner[1]):
-                    original_color = image.getpixel((i, j))
-                    image.putpixel((i, j), self.stain_rgb(original_color, (255, 0, 0)))
+                    original_color = image.getpixel((j, i))
+                    image.putpixel((j, i), self.stain_rgb(original_color, (255, 0, 0)))
             # Add border
             for i in range(left_up_corner[0], right_down_corner[0]):
-                image.putpixel((i, left_up_corner[1]), (0, 255, 0))
-                image.putpixel((i, right_down_corner[1] - 1), (0, 255, 0))
+                image.putpixel((left_up_corner[1], i), (0, 255, 0))
+                image.putpixel((right_down_corner[1] - 1, i), (0, 255, 0))
             for j in range(left_up_corner[1], right_down_corner[1]):
-                image.putpixel((left_up_corner[0], j), (0, 255, 0))
-                image.putpixel((right_down_corner[0] - 1, j), (0, 255, 0))
+                image.putpixel((j, left_up_corner[0]), (0, 255, 0))
+                image.putpixel((j, right_down_corner[0] - 1), (0, 255, 0))
         return image

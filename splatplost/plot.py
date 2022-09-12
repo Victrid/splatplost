@@ -120,7 +120,8 @@ def plot_block(entry_point: Coordinate, route: list[Coordinate], position: Coord
     return command_list, position
 
 
-def get_range(block_index: int, horizontal_divider: int, vertical_divider: int) -> tuple[Coordinate, Coordinate]:
+def get_range(block_index: int, horizontal_divider: int = 3, vertical_divider: int = 8) -> tuple[
+    Coordinate, Coordinate]:
     """
     Calculate the range of the block.
 
@@ -129,24 +130,29 @@ def get_range(block_index: int, horizontal_divider: int, vertical_divider: int) 
     :param vertical_divider: The number of vertical dividers.
     :return: The range of the block.
     """
-    x = block_index % vertical_divider
-    y = block_index // vertical_divider
-    return (x * 120 // horizontal_divider, y * 320 // vertical_divider), \
-           ((x + 1) * 120 // horizontal_divider, (y + 1) * 320 // vertical_divider)
+    index_on_width_direction = block_index % vertical_divider
+    index_on_height_direction = block_index // vertical_divider
+    return (
+               index_on_height_direction * 120 // horizontal_divider,
+               index_on_width_direction * 320 // vertical_divider
+               ), (
+               (index_on_height_direction + 1) * 120 // horizontal_divider,
+               (index_on_width_direction + 1) * 320 // vertical_divider,
+               )
 
 
-def get_loc_from_index(x: int, y: int, horizontal_divider: int, vertical_divider: int) -> int:
+def get_loc_from_index(width: int, height: int, horizontal_divider: int, vertical_divider: int) -> int:
     """
     Calculate the index of the block.
 
-    :param x: The x coordinate of the block.
-    :param y: The y coordinate of the block.
+    :param width: The x coordinate of the block.
+    :param height: The y coordinate of the block.
     :param horizontal_divider: The number of horizontal dividers.
     :param vertical_divider: The number of vertical dividers.
     :return: The index of the block.
     """
     block_size = (120 // horizontal_divider, 320 // vertical_divider)
-    return (x // block_size[0]) + (y // block_size[1]) * vertical_divider
+    return (width // block_size[0]) + (height // block_size[1]) * vertical_divider
 
 
 def erase_block(block_index: int, position: Coordinate, horizontal_divider: int,
@@ -162,7 +168,9 @@ def erase_block(block_index: int, position: Coordinate, horizontal_divider: int,
     :return: The command list and the new position of the cursor.
     """
     # Goto entry point
-    start_point, end_point = get_range(block_index, horizontal_divider, vertical_divider)
+    start_point, end_point = get_range(block_index, horizontal_divider=horizontal_divider,
+                                       vertical_divider=vertical_divider
+                                       )
     plot_size = ((end_point[0] - start_point[0]), (end_point[1] - start_point[1]))
     block = np.ones(plot_size)
     coords_list: list[Coordinate] = [(t[0], t[1]) for t in generate_dense_visit(block, 1, np.array(start_point))]
@@ -225,23 +233,28 @@ def partial_erase(order_file: str, backend: Type[NXWrapper], delay_ms: int = 100
 
     key_binding = Splatoon3KeyBinding() if splatoon3 else Splatoon2KeyBinding()
 
-    partial_plot_with_conn(connection, content, key_binding, stable_mode, clear_drawing, plot_blocks)
+    partial_erase_with_conn(connection=connection, key_binding=key_binding,
+                            horizontal_divider=content["divide_schedule"]["horizontal_divider"],
+                            vertical_divider=content["divide_schedule"]["vertical_divider"], stable_mode=stable_mode,
+                            clear_drawing=clear_drawing, plot_blocks=plot_blocks
+                            )
 
     connection.disconnect()
 
 
-def partial_erase_with_conn(connection: NXWrapper, blocks, key_binding: KeyBinding,
+def partial_erase_with_conn(connection: NXWrapper, key_binding: KeyBinding,
+                            horizontal_divider: int, vertical_divider: int,
                             stable_mode: bool = False, clear_drawing: bool = False,
                             plot_blocks: list[int] = None) -> None:
     """
     Clean blocks.
 
     :param connection: The connection to the Switch.
-    :param blocks: The blocks to plot.
     :param key_binding: The key binding.
+    :param horizontal_divider: The number of horizontal dividers.
+    :param vertical_divider: The number of vertical dividers.
     :param stable_mode: Whether to use stable mode.
     :param clear_drawing: Whether to clear the plot before plotting.
-    :param splatoon3: Whether to use Splatoon 3 mode.
     :param plot_blocks: The blocks to plot.
     """
 
@@ -256,10 +269,6 @@ def partial_erase_with_conn(connection: NXWrapper, blocks, key_binding: KeyBindi
 
     # Execute
     execute_command_list(command_list, connection, stable_mode=stable_mode)
-
-    # Start plotting
-    horizontal_divider = blocks["horizontal_divider"]
-    vertical_divider = blocks["vertical_divider"]
 
     for index in plot_blocks:
         command_list, current_position = erase_block(block_index=index, position=current_position,
