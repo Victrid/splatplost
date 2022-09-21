@@ -1,6 +1,6 @@
 # Splatplost
 
-[中文](readme.zh-CN.md)
+[中文](readme.zh-CN.md) | [Français](readme.fr.md)
 
 Splatplost est un utilitaire qui vous permet d'imprimer des images dans un dessin Splatoon, basé sur [libnxctrl](https://github.com/Victrid/libnxctrl). Pas comme les micro-controlleurs Teensy, ou les microcontrolleurs AVR, Vous avez seulement besoin d'utiliser le bluetooth de votre machine, ce qui est facile à faire. Avec un algorithme d'impression optimisé, cela peut vous sauver 1/3 du temps d'impression.
 
