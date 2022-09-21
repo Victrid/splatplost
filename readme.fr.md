@@ -8,7 +8,7 @@ Splatplost est un utilitaire qui vous permet d'imprimer des images dans un dessi
 
 ### Installation
 
-Il est recommandé d'utiliser une machine sous Linux. Ou si vous en avez pas, utiliser une [image flashable](docs/image.md). Windows ou MacOS ne sont pas supportés, car libnxctrl est basé sur bluez, le stack bluetooth de Linux.
+Il est recommandé d'utiliser une machine sous Linux. Ou si vous en avez pas, utiliser une [image flashable](docs/image.fr.md). Windows ou MacOS ne sont pas supportés, car libnxctrl est basé sur bluez, le stack bluetooth de Linux.
 
 Vous aurez besoin d'utiliser `sudo`, ou le compte root, vu que altérer le bluetooth est une opération privilégiée.
 
