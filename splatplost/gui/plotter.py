@@ -2,6 +2,7 @@ import sys
 import tempfile
 from functools import partial
 from pathlib import Path
+from typing import Optional
 
 import PIL
 from PIL import Image, ImageQt
@@ -10,95 +11,17 @@ from PyQt6.QtCore import QLocale, QMutex, QMutexLocker, QObject, QRunnable, QThr
     pyqtSignal, pyqtSlot
 from PyQt6.QtGui import QImage, QMouseEvent, QPixmap
 from PyQt6.QtWidgets import QApplication, QDialog, QMessageBox
-from libnxctrl.bluetooth import get_backend
+from libnxctrl.backend import get_available_backend, get_backend
 from libnxctrl.wrapper import Button, NXWrapper
 
 from splatplost.generate_route import generate_route_file
-from splatplost.gui.bugreport_ui import BugReportDialog
-from splatplost.gui.connect_to_switch_ui import Form_ConnectToSwitch
+from splatplost.gui.bugreport_ui import spawn_error_dialog
+from splatplost.gui.connect_to_switch_ui import ConnectToSwitchUI
 from splatplost.gui.plotter_ui import Form_plotter
 from splatplost.keybindings import Splatoon2KeyBinding, Splatoon3KeyBinding
 from splatplost.plot import partial_erase_with_conn, partial_plot_with_conn
 from splatplost.route_handler import RouteFile
 from splatplost.version import __version__
-
-
-def spawn_error_dialog(error: Exception, description: str, reportable: bool = True) -> int:
-    """
-    Create a dialog to show error message.
-
-    :param error: The error object.
-    :param description: The description of the error.
-    :param reportable: Whether to allow user to report the error.
-    """
-    dialog = QtWidgets.QMessageBox()
-    dialog.setText("**{}**\n\n"
-                   "```\n"
-                   "{}\n"
-                   "{}\n"
-                   "```".format(description,
-                                error.__class__.__name__, error.what() if hasattr(error, "what") else str(error)
-                                )
-                   )
-    dialog.setWindowTitle(QApplication.translate("@default", "Error happened"))
-    dialog.setTextFormat(Qt.TextFormat.MarkdownText)
-    if reportable:
-        dialog.setStandardButtons(QtWidgets.QMessageBox.StandardButton.Ok | QtWidgets.QMessageBox.StandardButton.Help)
-        dialog.setDefaultButton(QtWidgets.QMessageBox.StandardButton.Ok)
-        result = dialog.exec()
-
-        if result == QMessageBox.StandardButton.Help:
-            ui = BugReportDialog(error)
-            dialog = QDialog()
-            ui.setupUi(dialog)
-            dialog.exec()
-            result = QMessageBox.StandardButton.Ok
-
-        return result
-    else:
-        dialog.setStandardButtons(QtWidgets.QMessageBox.StandardButton.Ok)
-        dialog.setDefaultButton(QtWidgets.QMessageBox.StandardButton.Ok)
-        return dialog.exec()
-
-
-class ConnectToSwitchUI(Form_ConnectToSwitch):
-    def __init__(self, parent):
-        super().__init__()
-        self.parent: PlotterUI = parent
-        self.current_pairing_guide_image = 0
-
-    def start_pairing_clicked(self):
-        self.start_pairing.setEnabled(False)
-        self.start_pairing.setText(QApplication.translate("@default", "Pairing..."))
-        self.parent.start_pairing(success_callback=self.finished_pairing, fail_callback=self.error_pairing)
-
-    def finished_pairing(self):
-        self.start_pairing.setEnabled(True)
-        self.Step2.setEnabled(True)
-        self.Step1.setEnabled(False)
-
-    def error_pairing(self, err: Exception):
-        self.start_pairing.setEnabled(True)
-        self.start_pairing.setText(QApplication.translate("@default", "Start Pairing"))
-        if isinstance(err, PermissionError):
-            return spawn_error_dialog(err, QApplication.translate("@default", "Permission Error (Run as root?)"),
-                                      reportable=False
-                                      )
-        return spawn_error_dialog(err, QApplication.translate("@default", "Error when pairing"))
-
-    def done_clicked(self):
-        self.parent.ready_for_drawing()
-        self.parent_dialog.close()
-
-    def press_a_clicked(self):
-        self.parent.press_a()
-
-    def setupUi(self, connect_to_switch):
-        super().setupUi(connect_to_switch)
-        self.start_pairing.clicked.connect(self.start_pairing_clicked)
-        self.done.clicked.connect(self.done_clicked)
-        self.press_a.clicked.connect(self.press_a_clicked)
-        self.parent_dialog = connect_to_switch
 
 
 class WorkerSignals(QObject):
@@ -131,7 +54,7 @@ class PlotterUI(Form_plotter):
         super().__init__()
         self.tempdir = tempfile.TemporaryDirectory(prefix="splatplost")
         self.RouteFile = None
-        self.connection: NXWrapper | None = None
+        self.connection: Optional[NXWrapper] = None
         self.thread_pool: QThreadPool = QThreadPool()
         self.app = app
         self.form = form
@@ -167,7 +90,7 @@ class PlotterUI(Form_plotter):
             return False
         return True
 
-    def start_pairing(self, success_callback, fail_callback):
+    def start_pairing(self, backend_type, parameters, success_callback, fail_callback):
         # If we are already connected, hint the user.
         reconnect_confirm_dialog = QMessageBox()
         reconnect_confirm_dialog.setText(
@@ -186,10 +109,8 @@ class PlotterUI(Form_plotter):
 
         def pairing():
             try:
-                backend = get_backend("nxbt")
-                connection = backend(press_duration_ms=int(self.key_press_ms.value()),
-                                     delay_ms=int(self.delay_ms.value())
-                                     )
+                backend = get_backend(backend_name=backend_type)
+                connection = backend(**parameters)
                 connection.connect()
                 self.connection = connection
             except Exception as e:
@@ -208,11 +129,25 @@ class PlotterUI(Form_plotter):
     def press_a(self):
         self.connection.button_press(Button.A)
 
+    def press_shoulder_l(self):
+        self.connection.button_press(Button.SHOULDER_L)
+
+    def press_shoulder_r(self):
+        self.connection.button_press(Button.SHOULDER_R)
+
     def connect_switch(self):
-        ui = ConnectToSwitchUI(self)
-        dialog = QDialog()
-        ui.setupUi(dialog)
-        dialog.exec()
+        try:
+            ui = ConnectToSwitchUI(self, backend=self.backend_selector.currentText())
+            dialog = QDialog()
+            ui.setupUi(dialog)
+            dialog.exec()
+        except ValueError:
+            spawn_error_dialog(ValueError(QApplication.translate("@default", "No backend selected")),
+                               QApplication.translate("@default", "No backend selected"),
+                               reportable=False
+                               )
+        except Exception as e:
+            spawn_error_dialog(e, QApplication.translate("@default", "Error when connecting to switch"))
 
     def open_file_clicked(self):
         dialog = QtWidgets.QFileDialog()
@@ -322,10 +257,11 @@ class PlotterUI(Form_plotter):
             return
 
         def draw_func():
-            partial_plot_with_conn(self.connection, self.RouteFile.blocks.items(),
+            partial_plot_with_conn(self.connection, self.RouteFile.blocks.items(), key_binding=self.current_key_binding,
+                                   cursor_reset=not self.skip_cal.isChecked(),
+                                   cursor_reset_time=1000 * int(self.cal_time.value()),
                                    stable_mode=self.stable_mode.isChecked(),
                                    clear_drawing=self.clear_drawing.isChecked(),
-                                   key_binding=self.current_key_binding,
                                    plot_blocks=self.RouteFile.get_selected_blocks()
                                    )
 
@@ -355,12 +291,13 @@ class PlotterUI(Form_plotter):
             return
 
         def draw_func():
-            partial_erase_with_conn(self.connection,
+            partial_erase_with_conn(self.connection, key_binding=self.current_key_binding,
                                     horizontal_divider=self.RouteFile.horizontal_divider,
                                     vertical_divider=self.RouteFile.vertical_divider,
+                                    cursor_reset=not self.skip_cal.isChecked(),
+                                    cursor_reset_time=1000 * int(self.cal_time.value()),
                                     stable_mode=self.stable_mode.isChecked(),
                                     clear_drawing=self.clear_drawing.isChecked(),
-                                    key_binding=self.current_key_binding,
                                     plot_blocks=self.RouteFile.get_selected_blocks()
                                     )
 
@@ -440,6 +377,13 @@ class PlotterUI(Form_plotter):
         self.language_enUS.triggered.connect(partial(self.language_clicked, "en_US"))
         self.language_jaJP.triggered.connect(partial(self.language_clicked, "ja_JP"))
         self.language_zhTW.triggered.connect(partial(self.language_clicked, "zh_TW"))
+
+        # Init available backend
+        self.backend_selector.addItems(get_available_backend())
+
+        # Press
+        self.press_l.clicked.connect(self.press_shoulder_l)
+        self.press_r.clicked.connect(self.press_shoulder_r)
 
 
 def main():

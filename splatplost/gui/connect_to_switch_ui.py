@@ -7,8 +7,64 @@
 from pathlib import Path
 
 from PyQt6 import uic
+from PyQt6.QtWidgets import QApplication
+
+from splatplost.gui.backend_config import NxbtConfigWidget, SplatplostUSBConfigWidget
+from splatplost.gui.bugreport_ui import spawn_error_dialog
 
 file_path: Path = Path(__file__).parent / "connect_to_switch.ui"
 
 Form_ConnectToSwitch, Dialog_ConnectToSwitch = uic.loadUiType(str(file_path))
 
+
+class ConnectToSwitchUI(Form_ConnectToSwitch):
+    def __init__(self, parent, backend: str):
+        super().__init__()
+        self.parent = parent
+        self.backend = backend
+        if backend == "nxbt":
+            self.config_widget_ = NxbtConfigWidget()
+        elif backend == "Splatplost USB":
+            self.config_widget_ = SplatplostUSBConfigWidget()
+        elif backend == "":
+            raise ValueError("Backend not selected")
+        else:
+            raise RuntimeError("Backend error")
+
+    def start_pairing_clicked(self):
+        self.start_pairing.setEnabled(False)
+        self.start_pairing.setText(QApplication.translate("@default", "Pairing..."))
+        self.parent.start_pairing(backend_type=self.backend,
+                                  parameters=self.config_widget_.get_connection_args(),
+                                  success_callback=self.finished_pairing, fail_callback=self.error_pairing
+                                  )
+
+    def finished_pairing(self):
+        self.start_pairing.setEnabled(True)
+        self.Step2.setEnabled(True)
+        self.Step1.setEnabled(False)
+
+    def error_pairing(self, err: Exception):
+        self.start_pairing.setEnabled(True)
+        self.start_pairing.setText(QApplication.translate("@default", "Start Pairing"))
+        if isinstance(err, PermissionError):
+            return spawn_error_dialog(err, QApplication.translate("@default", "Permission Error (Run as root?)"),
+                                      reportable=False
+                                      )
+        return spawn_error_dialog(err, QApplication.translate("@default", "Error when pairing"))
+
+    def done_clicked(self):
+        self.parent.ready_for_drawing()
+        self.parent_dialog.close()
+
+    def press_a_clicked(self):
+        self.parent.press_a()
+
+    def setupUi(self, connect_to_switch):
+        super().setupUi(connect_to_switch)
+        self.config_widget_.setupUi(self.config_widget)
+        self.start_pairing.clicked.connect(self.start_pairing_clicked)
+        self.done.clicked.connect(self.done_clicked)
+        self.press_a.clicked.connect(self.press_a_clicked)
+
+        self.parent_dialog = connect_to_switch

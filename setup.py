@@ -44,6 +44,16 @@ setup(name='splatplost',
       long_description_content_type='text/markdown',
       classifiers=[
           "Development Status :: 3 - Alpha",
+          "Environment :: X11 Applications :: Qt",
+          "Intended Audience :: End Users/Desktop",
+          "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
+          "Natural Language :: English",
+          "Operating System :: POSIX :: Linux",
+          "Operating System :: MacOS :: MacOS X",
+          "Operating System :: Microsoft :: Windows",
+          "Programming Language :: Python :: 3",
+          "Programming Language :: Python :: 3.9",
+          "Topic :: Utilities"
           ],
       cmdclass={
           "build_py": LangBuilder,
@@ -55,10 +65,18 @@ setup(name='splatplost',
           "scipy~=1.9.1",
           "tqdm~=4.64.0",
           "scikit-image~=0.19.3",
-          "libnxctrl~=0.1.7",
+          "libnxctrl~=0.2.0.dev2",
           "tsp-solver2~=0.4.1",
           "PyQt6~=6.3.1",
           "requests~=2.26.0"],
+      extras_require={
+          "nxbt": [
+              "libnxctrl[nxbt]~=0.2.0.dev1; sys_platform == 'linux'",
+              ],
+          "usb":  [
+              "libnxctrl[usb]~=0.2.0.dev1",
+              ],
+          },
       python_requires=">=3.10",
       package_data={"splatplost": [
           "gui/*.ui",

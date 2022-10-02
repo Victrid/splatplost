@@ -4,90 +4,101 @@
 <context>
     <name>@default</name>
     <message>
-        <location filename="../plotter.py" line="43"/>
+        <location filename="../bugreport_ui.py" line="125"/>
         <source>Error happened</source>
         <translation>发生错误</translation>
     </message>
     <message>
-        <location filename="../plotter.py" line="72"/>
+        <location filename="../connect_to_switch_ui.py" line="36"/>
         <source>Pairing...</source>
         <translation>配对中......</translation>
     </message>
     <message>
-        <location filename="../plotter.py" line="82"/>
+        <location filename="../connect_to_switch_ui.py" line="49"/>
         <source>Start Pairing</source>
         <translation>开始配对</translation>
     </message>
     <message>
-        <location filename="../plotter.py" line="84"/>
+        <location filename="../connect_to_switch_ui.py" line="51"/>
         <source>Permission Error (Run as root?)</source>
         <translation>权限错误（是否以root权限运行？）</translation>
     </message>
     <message>
-        <location filename="../plotter.py" line="87"/>
+        <location filename="../connect_to_switch_ui.py" line="54"/>
         <source>Error when pairing</source>
         <translation>配对时发生错误</translation>
     </message>
     <message>
-        <location filename="../plotter.py" line="312"/>
-        <location filename="../plotter.py" line="298"/>
-        <location filename="../plotter.py" line="243"/>
-        <location filename="../plotter.py" line="242"/>
-        <location filename="../plotter.py" line="152"/>
-        <location filename="../plotter.py" line="151"/>
+        <location filename="../plotter.py" line="247"/>
+        <location filename="../plotter.py" line="233"/>
+        <location filename="../plotter.py" line="178"/>
+        <location filename="../plotter.py" line="177"/>
+        <location filename="../plotter.py" line="75"/>
+        <location filename="../plotter.py" line="74"/>
         <source>No file loaded</source>
         <translation>没有加载文件</translation>
     </message>
     <message>
-        <location filename="../plotter.py" line="158"/>
-        <location filename="../plotter.py" line="157"/>
+        <location filename="../plotter.py" line="81"/>
+        <location filename="../plotter.py" line="80"/>
         <source>Splatoon version not selected</source>
         <translation>没有选择Splatoon版本</translation>
     </message>
     <message>
-        <location filename="../plotter.py" line="164"/>
-        <location filename="../plotter.py" line="163"/>
+        <location filename="../plotter.py" line="87"/>
+        <location filename="../plotter.py" line="86"/>
         <source>Switch not connected</source>
         <translation>Switch没有连接</translation>
     </message>
     <message>
-        <location filename="../plotter.py" line="174"/>
+        <location filename="../plotter.py" line="97"/>
         <source>The switch seems to be connected. Are you sure you want to reconnect?</source>
         <translation>Switch可能已经连接了。确定要重新连接吗？</translation>
     </message>
     <message>
-        <location filename="../plotter.py" line="236"/>
+        <location filename="../plotter.py" line="146"/>
+        <location filename="../plotter.py" line="145"/>
+        <source>No backend selected</source>
+        <translation>没有选择连接后端</translation>
+    </message>
+    <message>
+        <location filename="../plotter.py" line="150"/>
+        <source>Error when connecting to switch</source>
+        <translation>连接到Switch时发生错误</translation>
+    </message>
+    <message>
+        <location filename="../plotter.py" line="171"/>
         <source>Error when loading image</source>
         <translation>加载图像时发生错误</translation>
     </message>
     <message>
-        <location filename="../plotter.py" line="251"/>
+        <location filename="../plotter.py" line="186"/>
         <source>Error when reading file</source>
         <translation>读取文件时发生错误</translation>
     </message>
     <message>
-        <location filename="../plotter.py" line="261"/>
+        <location filename="../plotter.py" line="196"/>
         <source>File read successfully</source>
         <translation>文件读取成功</translation>
     </message>
     <message>
-        <location filename="../plotter.py" line="375"/>
-        <location filename="../plotter.py" line="340"/>
+        <location filename="../plotter.py" line="312"/>
+        <location filename="../plotter.py" line="276"/>
         <source>Drawing finished</source>
         <translation>画图完成</translation>
     </message>
     <message>
-        <location filename="../plotter.py" line="346"/>
+        <location filename="../plotter.py" line="282"/>
         <source>Error when drawing</source>
         <translation>绘图时发生错误</translation>
     </message>
     <message>
-        <location filename="../plotter.py" line="381"/>
+        <location filename="../plotter.py" line="318"/>
         <source>Error when erasing</source>
         <translation>擦除时发生错误</translation>
     </message>
     <message>
-        <location filename="../plotter.py" line="409"/>
+        <location filename="../plotter.py" line="346"/>
         <source>**Splatplost version {}**</source>
         <translation>**Splatplost 版本{}**</translation>
     </message>
@@ -101,32 +112,7 @@
     </message>
 </context>
 <context>
-    <name>Dialog</name>
-    <message>
-        <location filename="../bugreport.ui" line="0"/>
-        <source>Bug Report</source>
-        <translation>错误报告</translation>
-    </message>
-    <message>
-        <location filename="../bugreport.ui" line="0"/>
-        <source>Bug Report in Markdown format:</source>
-        <translation>Markdown 格式的错误报告：</translation>
-    </message>
-    <message>
-        <location filename="../bugreport.ui" line="0"/>
-        <source>Save to File</source>
-        <translation>保存到文件</translation>
-    </message>
-    <message>
-        <location filename="../bugreport.ui" line="0"/>
-        <source>Copy to Clipboard</source>
-        <translation>复制到剪贴板</translation>
-    </message>
-    <message>
-        <location filename="../bugreport.ui" line="0"/>
-        <source>Open an Issue</source>
-        <translation>打开一个Issue</translation>
-    </message>
+    <name>Connect_to_switch</name>
     <message>
         <location filename="../connect_to_switch.ui" line="0"/>
         <source>Connect to Switch</source>
@@ -175,9 +161,152 @@ If you need to select the controller use &quot;Press A&quot;.</source>
         <source>Done</source>
         <translation>完成</translation>
     </message>
+</context>
+<context>
+    <name>Dialog</name>
+    <message>
+        <source>Bug Report</source>
+        <translation type="vanished">错误报告</translation>
+    </message>
+    <message>
+        <source>Bug Report in Markdown format:</source>
+        <translation type="vanished">Markdown 格式的错误报告：</translation>
+    </message>
+    <message>
+        <source>Save to File</source>
+        <translation type="vanished">保存到文件</translation>
+    </message>
+    <message>
+        <source>Copy to Clipboard</source>
+        <translation type="vanished">复制到剪贴板</translation>
+    </message>
+    <message>
+        <source>Open an Issue</source>
+        <translation type="vanished">打开一个Issue</translation>
+    </message>
+    <message>
+        <source>Connect to Switch</source>
+        <translation type="vanished">连接到Switch</translation>
+    </message>
+    <message>
+        <source>1</source>
+        <translation type="vanished">第一步</translation>
+    </message>
+    <message>
+        <source>Enter the pairing menu on Switch and click &quot;Start Pairing&quot;</source>
+        <translation type="vanished">进入Switch配对目录，点击下方的开始配对</translation>
+    </message>
+    <message>
+        <source>Start Pairing</source>
+        <translation type="vanished">开始配对</translation>
+    </message>
+    <message>
+        <source>2</source>
+        <translation type="vanished">第二步</translation>
+    </message>
+    <message>
+        <source>- Go to Post
+- Select smallest brush (by touch?)
+- Click &quot;Done&quot;. 
+
+If you need to select the controller use &quot;Press A&quot;.</source>
+        <translation type="vanished">- 进入投稿界面
+- 选择最小的画笔 (可以通过触控)
+- 点击完成以退出。 
+
+如果您需要选择手柄，可以使用“按 A”。</translation>
+    </message>
+    <message>
+        <source>Press A</source>
+        <translation type="vanished">按 A</translation>
+    </message>
+    <message>
+        <source>Done</source>
+        <translation type="vanished">完成</translation>
+    </message>
     <message>
         <source>Go to Post and click &quot;Done&quot;. If you need to select the controller use &quot;Press A&quot;</source>
         <translation type="vanished">进入投稿界面。点击完成以退出。如果您需要选择手柄，可以使用“按 A”</translation>
+    </message>
+</context>
+<context>
+    <name>NXBT_cfg</name>
+    <message>
+        <location filename="../nxbt.ui" line="0"/>
+        <source>Form</source>
+        <translation>窗格</translation>
+    </message>
+    <message>
+        <location filename="../nxbt.ui" line="0"/>
+        <source>Press Time</source>
+        <translation>按键时长</translation>
+    </message>
+    <message>
+        <location filename="../nxbt.ui" line="0"/>
+        <location filename="../nxbt.ui" line="0"/>
+        <source> ms</source>
+        <translation> 毫秒</translation>
+    </message>
+    <message>
+        <location filename="../nxbt.ui" line="0"/>
+        <source>Delay Time</source>
+        <translation>按键间延迟</translation>
+    </message>
+</context>
+<context>
+    <name>Splatplost_USB_cfg</name>
+    <message>
+        <location filename="../splatplost_USB.ui" line="0"/>
+        <source>Form</source>
+        <translation>窗格</translation>
+    </message>
+    <message>
+        <location filename="../splatplost_USB.ui" line="0"/>
+        <source>Device</source>
+        <translation>设备</translation>
+    </message>
+    <message>
+        <location filename="../splatplost_USB.ui" line="0"/>
+        <source> ms</source>
+        <translation> 毫秒</translation>
+    </message>
+    <message>
+        <location filename="../splatplost_USB.ui" line="0"/>
+        <source>Press Time</source>
+        <translation>按键时长</translation>
+    </message>
+    <message>
+        <location filename="../splatplost_USB.ui" line="0"/>
+        <source>**Notice**: If joystick is not shown, close this window and connect to switch again. </source>
+        <translation>**注意**：如果手柄没有正确显示，关闭该窗口并重新点击“连接到Switch”。 </translation>
+    </message>
+</context>
+<context>
+    <name>bugreport</name>
+    <message>
+        <location filename="../bugreport.ui" line="0"/>
+        <source>Bug Report</source>
+        <translation>错误报告</translation>
+    </message>
+    <message>
+        <location filename="../bugreport.ui" line="0"/>
+        <source>Bug Report in Markdown format:</source>
+        <translation>Markdown 格式的错误报告：</translation>
+    </message>
+    <message>
+        <location filename="../bugreport.ui" line="0"/>
+        <source>Save to File</source>
+        <translation>保存到文件</translation>
+    </message>
+    <message>
+        <location filename="../bugreport.ui" line="0"/>
+        <source>Copy to Clipboard</source>
+        <translation>复制到剪贴板</translation>
+    </message>
+    <message>
+        <location filename="../bugreport.ui" line="0"/>
+        <source>Open an Issue</source>
+        <translation>打开一个Issue</translation>
     </message>
 </context>
 <context>
@@ -224,13 +353,33 @@ If you need to select the controller use &quot;Press A&quot;.</source>
     </message>
     <message>
         <location filename="../plotter.ui" line="0"/>
-        <source>Select All</source>
-        <translation>全选</translation>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;If your connection is good enough, you can check this to skip stepwise caliberation, i. e. return to corners after drawing each block.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;如果你的连接足够稳定，你可以勾选该选项以跳过逐步校准（即画完一个方块后返回图像顶点）。&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../plotter.ui" line="0"/>
-        <source>Deselect All</source>
-        <translation>全不选</translation>
+        <source>Skip stepwise caliberation</source>
+        <translation>跳过逐步校准</translation>
+    </message>
+    <message>
+        <location filename="../plotter.ui" line="0"/>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;If caliberation steps cannot move to the correct corner, you need to increase the factor.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;如果在校准时不能正确返回图像顶点，你需要增加该倍率。&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+    </message>
+    <message>
+        <location filename="../plotter.ui" line="0"/>
+        <source>Caliberation Press Extend Factor</source>
+        <translation>校准延长倍率</translation>
+    </message>
+    <message>
+        <location filename="../plotter.ui" line="0"/>
+        <source>x</source>
+        <translation>倍</translation>
+    </message>
+    <message>
+        <location filename="../plotter.ui" line="0"/>
+        <source>Select All</source>
+        <translation>全选</translation>
     </message>
     <message>
         <location filename="../plotter.ui" line="0"/>
@@ -239,19 +388,13 @@ If you need to select the controller use &quot;Press A&quot;.</source>
     </message>
     <message>
         <location filename="../plotter.ui" line="0"/>
+        <source>Deselect All</source>
+        <translation>全不选</translation>
+    </message>
+    <message>
+        <location filename="../plotter.ui" line="0"/>
         <source>Erase selected</source>
         <translation>擦除选中部分</translation>
-    </message>
-    <message>
-        <location filename="../plotter.ui" line="0"/>
-        <source>Delay</source>
-        <translation>按键间延迟</translation>
-    </message>
-    <message>
-        <location filename="../plotter.ui" line="0"/>
-        <location filename="../plotter.ui" line="0"/>
-        <source> ms</source>
-        <translation> 毫秒</translation>
     </message>
     <message>
         <location filename="../plotter.ui" line="0"/>
@@ -260,8 +403,8 @@ If you need to select the controller use &quot;Press A&quot;.</source>
     </message>
     <message>
         <location filename="../plotter.ui" line="0"/>
-        <source>Key press</source>
-        <translation>按键时长</translation>
+        <source>Select a connect backend...</source>
+        <translation>选择连接后端...</translation>
     </message>
     <message>
         <location filename="../plotter.ui" line="0"/>
@@ -285,8 +428,28 @@ If you need to select the controller use &quot;Press A&quot;.</source>
     </message>
     <message>
         <location filename="../plotter.ui" line="0"/>
+        <source>Press L</source>
+        <translation>按 L</translation>
+    </message>
+    <message>
+        <location filename="../plotter.ui" line="0"/>
+        <source>Press R</source>
+        <translation>按 R</translation>
+    </message>
+    <message>
+        <location filename="../plotter.ui" line="0"/>
+        <source>Clear the canvas before drawing.</source>
+        <translation>在绘制前清空画布。</translation>
+    </message>
+    <message>
+        <location filename="../plotter.ui" line="0"/>
         <source>Clear Drawing</source>
         <translation>清除绘图</translation>
+    </message>
+    <message>
+        <location filename="../plotter.ui" line="0"/>
+        <source>Send whole command to drawing buffer to increase stablity.</source>
+        <translation>将全部命令送入作画缓存中以增加稳定性。</translation>
     </message>
     <message>
         <location filename="../plotter.ui" line="0"/>
@@ -297,6 +460,18 @@ If you need to select the controller use &quot;Press A&quot;.</source>
         <location filename="../plotter.ui" line="0"/>
         <source>Information</source>
         <translation>信息</translation>
+    </message>
+    <message>
+        <source>Delay</source>
+        <translation type="vanished">按键间延迟</translation>
+    </message>
+    <message>
+        <source> ms</source>
+        <translation type="vanished"> 毫秒</translation>
+    </message>
+    <message>
+        <source>Key press</source>
+        <translation type="vanished">按键时长</translation>
     </message>
     <message>
         <source>Right click to select, Left click to delect.</source>

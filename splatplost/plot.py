@@ -11,12 +11,13 @@ from splatplost.keybindings import KeyBinding, Splatoon2KeyBinding, Splatoon3Key
 from splatplost.version import __version__
 
 
-def reset_cursor_position(end_point, start_point) -> tuple[CommandList, Coordinate]:
+def reset_cursor_position(end_point, start_point, press_time) -> tuple[CommandList, Coordinate]:
     """
     Reset the cursor to the nearest reset corner point.
 
     :param end_point: The current position of the cursor.
     :param start_point: The target position of the cursor.
+    :param press_time: The time to hold the button.
     :return: The command list and the new position of the cursor.
     """
     direction_map = {
@@ -35,7 +36,7 @@ def reset_cursor_position(end_point, start_point) -> tuple[CommandList, Coordina
 
     point = [(0, 0), (119, 0), (0, 319), (119, 319)]
 
-    return [(direction_map[d], 8000) for d in point_location[distance_min]], point[distance_min]
+    return [(direction_map[d], press_time) for d in point_location[distance_min]], point[distance_min]
 
 
 def march(from_point: Coordinate, to_point: Coordinate) -> CommandList:
@@ -100,8 +101,8 @@ def execute_command_list(command_list: CommandList, connection: NXWrapper,
                 connection.button_press(command)
 
 
-def plot_block(entry_point: Coordinate, route: list[Coordinate], position: Coordinate, keyBinding: KeyBinding) -> tuple[
-    CommandList, Coordinate]:
+def plot_block(entry_point: Coordinate, route: list[Coordinate], position: Coordinate, keyBinding: KeyBinding,
+               cursor_reset: bool, cursor_reset_time: int) -> tuple[CommandList, Coordinate]:
     """
     Plot a block.
 
@@ -109,10 +110,15 @@ def plot_block(entry_point: Coordinate, route: list[Coordinate], position: Coord
     :param route: The route, of plotting dots, of the block.
     :param position: The current position of the cursor.
     :param keyBinding: The key binding.
+    :param cursor_reset: Whether to reset the cursor.
+    :param cursor_reset_time: The time to hold the button to reset the cursor.
     :return: The command list and the new position of the cursor.
     """
     # Goto entry point
-    command_list, position = reset_cursor_position(position, entry_point)
+    if cursor_reset:
+        command_list, position = reset_cursor_position(position, entry_point, cursor_reset_time)
+    else:
+        command_list = []
     for coordinate in route:
         command_list += march(position, coordinate)
         command_list += keyBinding.draw(BrushSize.SMALL)
@@ -120,8 +126,8 @@ def plot_block(entry_point: Coordinate, route: list[Coordinate], position: Coord
     return command_list, position
 
 
-def get_range(block_index: int, horizontal_divider: int = 3, vertical_divider: int = 8) -> tuple[
-    Coordinate, Coordinate]:
+def get_range(
+        block_index: int, horizontal_divider: int = 3, vertical_divider: int = 8) -> tuple[Coordinate, Coordinate]:
     """
     Calculate the range of the block.
 
@@ -155,8 +161,8 @@ def get_loc_from_index(width: int, height: int, horizontal_divider: int, vertica
     return (width // block_size[0]) + (height // block_size[1]) * vertical_divider
 
 
-def erase_block(block_index: int, position: Coordinate, horizontal_divider: int,
-                vertical_divider: int, keyBinding: KeyBinding) -> tuple[CommandList, Coordinate]:
+def erase_block(block_index: int, position: Coordinate, horizontal_divider: int, vertical_divider: int,
+                key_binding: KeyBinding, cursor_reset: bool, cursor_reset_time: int) -> tuple[CommandList, Coordinate]:
     """
     Erase a block.
 
@@ -164,7 +170,9 @@ def erase_block(block_index: int, position: Coordinate, horizontal_divider: int,
     :param position: Current position of the cursor.
     :param horizontal_divider: The number of horizontal dividers.
     :param vertical_divider: The number of vertical dividers.
-    :param keyBinding: The key binding.
+    :param key_binding: The key binding.
+    :param cursor_reset: Whether to reset the cursor.
+    :param cursor_reset_time: The time to reset the cursor.
     :return: The command list and the new position of the cursor.
     """
     # Goto entry point
@@ -176,11 +184,14 @@ def erase_block(block_index: int, position: Coordinate, horizontal_divider: int,
     coords_list: list[Coordinate] = [(t[0], t[1]) for t in generate_dense_visit(block, 1, np.array(start_point))]
 
     # Goto entry point
-    command_list, position = reset_cursor_position(position, start_point)
+    if cursor_reset:
+        command_list, position = reset_cursor_position(position, start_point, cursor_reset_time)
+    else:
+        command_list = []
 
     for coordinate in coords_list:
         command_list += march(position, coordinate)
-        command_list += keyBinding.erase(BrushSize.SMALL)
+        command_list += key_binding.erase(BrushSize.SMALL)
         position = coordinate
 
     return command_list, position
@@ -235,17 +246,17 @@ def partial_erase(order_file: str, backend: Type[NXWrapper], delay_ms: int = 100
 
     partial_erase_with_conn(connection=connection, key_binding=key_binding,
                             horizontal_divider=content["divide_schedule"]["horizontal_divider"],
-                            vertical_divider=content["divide_schedule"]["vertical_divider"], stable_mode=stable_mode,
-                            clear_drawing=clear_drawing, plot_blocks=plot_blocks
+                            vertical_divider=content["divide_schedule"]["vertical_divider"], cursor_reset=True,
+                            cursor_reset_time=10000, stable_mode=stable_mode, clear_drawing=clear_drawing,
+                            plot_blocks=plot_blocks
                             )
 
     connection.disconnect()
 
 
-def partial_erase_with_conn(connection: NXWrapper, key_binding: KeyBinding,
-                            horizontal_divider: int, vertical_divider: int,
-                            stable_mode: bool = False, clear_drawing: bool = False,
-                            plot_blocks: list[int] = None) -> None:
+def partial_erase_with_conn(connection: NXWrapper, key_binding: KeyBinding, horizontal_divider: int,
+                            vertical_divider: int, cursor_reset, cursor_reset_time, stable_mode: bool = False,
+                            clear_drawing: bool = False, plot_blocks: list[int] = None) -> None:
     """
     Clean blocks.
 
@@ -259,7 +270,7 @@ def partial_erase_with_conn(connection: NXWrapper, key_binding: KeyBinding,
     """
 
     # Goto (0,0) point
-    command_list, current_position = reset_cursor_position((0, 0), (0, 0))
+    command_list, current_position = reset_cursor_position((0, 0), (0, 0), cursor_reset_time)
     # Press clear button
     if clear_drawing:
         command_list += key_binding.clear()
@@ -273,12 +284,13 @@ def partial_erase_with_conn(connection: NXWrapper, key_binding: KeyBinding,
     for index in plot_blocks:
         command_list, current_position = erase_block(block_index=index, position=current_position,
                                                      horizontal_divider=horizontal_divider,
-                                                     vertical_divider=vertical_divider, keyBinding=key_binding
+                                                     vertical_divider=vertical_divider, key_binding=key_binding,
+                                                     cursor_reset=cursor_reset, cursor_reset_time=cursor_reset_time
                                                      )
         execute_command_list(command_list, connection, stable_mode=stable_mode)
 
 
-def partial_plot_with_conn(connection: NXWrapper, blocks, key_binding: KeyBinding,
+def partial_plot_with_conn(connection: NXWrapper, blocks, key_binding: KeyBinding, cursor_reset, cursor_reset_time,
                            stable_mode: bool = False, clear_drawing: bool = False,
                            plot_blocks: list[int] = None) -> None:
     """
@@ -287,12 +299,14 @@ def partial_plot_with_conn(connection: NXWrapper, blocks, key_binding: KeyBindin
     :param connection: The connection to the Switch.
     :param blocks: The blocks scheme.
     :param key_binding: The key binding.
+    :param cursor_reset: whether to reset the cursor between each block.
+    :param cursor_reset_time: The time to reset the cursor.
     :param stable_mode: Whether to use stable mode.
     :param clear_drawing: Whether to clear the plot before plotting.
     :param plot_blocks: The blocks to plot.
     """
     # Goto (0,0) point
-    command_list, current_position = reset_cursor_position((0, 0), (0, 0))
+    command_list, current_position = reset_cursor_position((0, 0), (0, 0), cursor_reset_time)
     # Press clear button
     if clear_drawing:
         command_list += key_binding.clear()
@@ -304,12 +318,11 @@ def partial_plot_with_conn(connection: NXWrapper, blocks, key_binding: KeyBindin
     for block_name, block in blocks:
         if int(block_name) not in plot_blocks:
             continue
-        command_list, current_position = plot_block(
-                entry_point=parse_coordinate(block["entry_point"]),
-                route=[parse_coordinate(coord) for coord in block["visit_route"]],
-                position=current_position,
-                keyBinding=key_binding
-                )
+        command_list, current_position = plot_block(entry_point=parse_coordinate(block["entry_point"]),
+                                                    route=[parse_coordinate(coord) for coord in block["visit_route"]],
+                                                    position=current_position, keyBinding=key_binding,
+                                                    cursor_reset=cursor_reset, cursor_reset_time=10000
+                                                    )
         execute_command_list(command_list, connection, stable_mode=stable_mode)
 
 
@@ -358,12 +371,10 @@ def partial_plot(order_file: str, backend: Type[NXWrapper], delay_ms: int = 100,
             break
         connection.button_press(Button.A)
 
-    partial_plot_with_conn(connection=connection,
-                           blocks=content["blocks"].items(),
-                           stable_mode=stable_mode,
-                           clear_drawing=clear_drawing,
+    partial_plot_with_conn(connection=connection, blocks=content["blocks"].items(),
                            key_binding=Splatoon3KeyBinding() if splatoon3 else Splatoon2KeyBinding(),
-                           plot_blocks=plot_blocks
+                           cursor_reset=False, cursor_reset_time=10000, stable_mode=stable_mode,
+                           clear_drawing=clear_drawing, plot_blocks=plot_blocks
                            )
     connection.disconnect()
 

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>619</width>
-    <height>529</height>
+    <width>658</width>
+    <height>590</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -18,23 +18,8 @@
     <item>
      <layout class="QVBoxLayout" name="verticalLayout">
       <item>
-       <layout class="QHBoxLayout" name="image_select_layout">
-        <property name="sizeConstraint">
-         <enum>QLayout::SetDefaultConstraint</enum>
-        </property>
-        <property name="leftMargin">
-         <number>6</number>
-        </property>
-        <property name="topMargin">
-         <number>6</number>
-        </property>
-        <property name="rightMargin">
-         <number>6</number>
-        </property>
-        <property name="bottomMargin">
-         <number>6</number>
-        </property>
-        <item>
+       <layout class="QGridLayout" name="gridLayout_3">
+        <item row="0" column="0" colspan="2">
          <widget class="QLineEdit" name="file_loc">
           <property name="text">
            <string/>
@@ -50,47 +35,37 @@
           </property>
          </widget>
         </item>
-        <item>
+        <item row="0" column="2">
          <widget class="QPushButton" name="open_file">
           <property name="text">
            <string>Select</string>
           </property>
          </widget>
         </item>
-        <item>
+        <item row="1" column="0" rowspan="2">
          <widget class="QPushButton" name="read_file">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
           <property name="text">
            <string>Load</string>
           </property>
          </widget>
         </item>
-       </layout>
-      </item>
-      <item>
-       <layout class="QHBoxLayout" name="LoadEmptyLayout">
-        <property name="leftMargin">
-         <number>6</number>
-        </property>
-        <property name="topMargin">
-         <number>6</number>
-        </property>
-        <property name="rightMargin">
-         <number>6</number>
-        </property>
-        <property name="bottomMargin">
-         <number>6</number>
-        </property>
-        <item>
+        <item row="1" column="1" colspan="2">
          <widget class="QLabel" name="label_5">
           <property name="text">
            <string>Only erasing?</string>
           </property>
           <property name="alignment">
-           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
           </property>
          </widget>
         </item>
-        <item>
+        <item row="2" column="1" colspan="2">
          <widget class="QPushButton" name="load_white">
           <property name="text">
            <string>Load an Empty Image</string>
@@ -106,7 +81,7 @@
         </property>
         <property name="sizeHint" stdset="0">
          <size>
-          <width>17</width>
+          <width>311</width>
           <height>13</height>
          </size>
         </property>
@@ -129,7 +104,7 @@
         </property>
        </widget>
       </item>
-      <item alignment="Qt::AlignHCenter|Qt::AlignVCenter">
+      <item>
        <widget class="QLabel" name="image">
         <property name="enabled">
          <bool>false</bool>
@@ -180,64 +155,69 @@
         </property>
         <property name="sizeHint" stdset="0">
          <size>
-          <width>17</width>
+          <width>311</width>
           <height>13</height>
          </size>
         </property>
        </spacer>
       </item>
       <item>
-       <layout class="QHBoxLayout" name="selection_layout">
-        <property name="leftMargin">
-         <number>6</number>
-        </property>
-        <property name="topMargin">
-         <number>6</number>
-        </property>
-        <property name="rightMargin">
-         <number>6</number>
-        </property>
-        <property name="bottomMargin">
-         <number>6</number>
-        </property>
-        <item>
+       <layout class="QGridLayout" name="gridLayout">
+        <item row="0" column="0" colspan="3">
+         <widget class="QCheckBox" name="skip_cal">
+          <property name="toolTip">
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;If your connection is good enough, you can check this to skip stepwise caliberation, i. e. return to corners after drawing each block.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          </property>
+          <property name="text">
+           <string>Skip stepwise caliberation</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0" colspan="3">
+         <widget class="QLabel" name="label">
+          <property name="toolTip">
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;If caliberation steps cannot move to the correct corner, you need to increase the factor.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          </property>
+          <property name="text">
+           <string>Caliberation Press Extend Factor</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="3">
+         <widget class="QSpinBox" name="cal_time">
+          <property name="suffix">
+           <string>x</string>
+          </property>
+          <property name="minimum">
+           <number>5</number>
+          </property>
+          <property name="value">
+           <number>12</number>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="0">
          <widget class="QPushButton" name="select_all">
           <property name="text">
            <string>Select All</string>
           </property>
          </widget>
         </item>
-        <item>
-         <widget class="QPushButton" name="deselect_all">
-          <property name="text">
-           <string>Deselect All</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
-      <item>
-       <layout class="QHBoxLayout" name="print_layout">
-        <property name="leftMargin">
-         <number>6</number>
-        </property>
-        <property name="topMargin">
-         <number>6</number>
-        </property>
-        <property name="rightMargin">
-         <number>6</number>
-        </property>
-        <property name="bottomMargin">
-         <number>6</number>
-        </property>
-        <item>
+        <item row="3" column="0">
          <widget class="QPushButton" name="draw_selected">
           <property name="text">
            <string>Draw selected</string>
           </property>
          </widget>
         </item>
-        <item>
+        <item row="2" column="2" colspan="2">
+         <widget class="QPushButton" name="deselect_all">
+          <property name="text">
+           <string>Deselect All</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="2" colspan="2">
          <widget class="QPushButton" name="erase_selected">
           <property name="text">
            <string>Erase selected</string>
@@ -281,38 +261,6 @@
         <property name="bottomMargin">
          <number>6</number>
         </property>
-        <item row="2" column="0">
-         <widget class="QLabel" name="label">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="text">
-           <string>Delay</string>
-          </property>
-         </widget>
-        </item>
-        <item row="3" column="1">
-         <widget class="QSpinBox" name="key_press_ms">
-          <property name="suffix">
-           <string> ms</string>
-          </property>
-          <property name="minimum">
-           <number>1</number>
-          </property>
-          <property name="maximum">
-           <number>1000</number>
-          </property>
-          <property name="singleStep">
-           <number>1</number>
-          </property>
-          <property name="value">
-           <number>80</number>
-          </property>
-         </widget>
-        </item>
         <item row="1" column="0" colspan="2">
          <widget class="QLabel" name="label_3">
           <property name="text">
@@ -323,29 +271,10 @@
           </property>
          </widget>
         </item>
-        <item row="3" column="0">
-         <widget class="QLabel" name="label_4">
-          <property name="text">
-           <string>Key press</string>
-          </property>
-         </widget>
-        </item>
-        <item row="2" column="1">
-         <widget class="QSpinBox" name="delay_ms">
-          <property name="suffix">
-           <string> ms</string>
-          </property>
-          <property name="prefix">
-           <string/>
-          </property>
-          <property name="minimum">
-           <number>1</number>
-          </property>
-          <property name="maximum">
-           <number>1000</number>
-          </property>
-          <property name="value">
-           <number>80</number>
+        <item row="2" column="0" colspan="2">
+         <widget class="QComboBox" name="backend_selector">
+          <property name="placeholderText">
+           <string>Select a connect backend...</string>
           </property>
          </widget>
         </item>
@@ -425,7 +354,28 @@
        </widget>
       </item>
       <item>
+       <layout class="QHBoxLayout" name="horizontalLayout_2">
+        <item>
+         <widget class="QPushButton" name="press_l">
+          <property name="text">
+           <string>Press L</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="press_r">
+          <property name="text">
+           <string>Press R</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
        <widget class="QCheckBox" name="clear_drawing">
+        <property name="toolTip">
+         <string>Clear the canvas before drawing.</string>
+        </property>
         <property name="text">
          <string>Clear Drawing</string>
         </property>
@@ -433,6 +383,9 @@
       </item>
       <item>
        <widget class="QCheckBox" name="stable_mode">
+        <property name="toolTip">
+         <string>Send whole command to drawing buffer to increase stablity.</string>
+        </property>
         <property name="text">
          <string>Stable Mode</string>
         </property>
@@ -471,7 +424,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>619</width>
+     <width>658</width>
      <height>34</height>
     </rect>
    </property>

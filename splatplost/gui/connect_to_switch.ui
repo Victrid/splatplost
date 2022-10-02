@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>Dialog</class>
- <widget class="QDialog" name="Dialog">
+ <class>Connect_to_switch</class>
+ <widget class="QDialog" name="Connect_to_switch">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>486</width>
+    <width>572</width>
     <height>310</height>
    </rect>
   </property>
@@ -36,6 +36,9 @@
          <set>Qt::AlignCenter</set>
         </property>
        </widget>
+      </item>
+      <item>
+       <widget class="QWidget" name="config_widget" native="true"/>
       </item>
       <item>
        <widget class="QLabel" name="label">

@@ -1,4 +1,5 @@
 import json
+from typing import Union
 
 import numpy as np
 from PIL import Image
@@ -20,7 +21,7 @@ class RouteFile:
         self.vertical_divider: int = self.orig_file["divide_schedule"]["vertical_divider"]
         self.horizontal_divider: int = self.orig_file["divide_schedule"]["horizontal_divider"]
 
-        self.blocks: dict[str, dict[str, list[str] | str]] = self.orig_file["blocks"]
+        self.blocks: dict[str, dict[str, Union[list[str], str]]] = self.orig_file["blocks"]
 
         self.pixel = np.zeros((120, 320), dtype=np.uint8)
 

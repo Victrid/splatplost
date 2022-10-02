@@ -1,8 +1,9 @@
 import enum
+from typing import Union
 
 from libnxctrl.wrapper import Button
 
-Command = tuple[Button, int] | Button
+Command = Union[tuple[Button, int], Button]
 CommandList = list[Command]
 Coordinate = tuple[int, int]
 
