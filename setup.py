@@ -28,7 +28,7 @@ setup(
             "scipy~=1.9.1",
             "tqdm~=4.64.0",
             "scikit-image~=0.19.3",
-            "libnxctrl~=0.1.7",
+            "libnxctrl>=0.1.7,<0.3.0",
             "tsp-solver2~=0.4.1",
             ]
         )
