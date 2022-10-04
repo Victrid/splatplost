@@ -6,7 +6,7 @@ Form_nxbt, _ = uic.loadUiType(str(Path(__file__).parent / "nxbt.ui"))
 
 Form_SUSB, _ = uic.loadUiType(str(Path(__file__).parent / "splatplost_USB.ui"))
 
-
+Form_Remote, _ = uic.loadUiType(str(Path(__file__).parent / "remote.ui"))
 class NxbtConfigWidget(Form_nxbt):
     def get_connection_args(self):
         return {
@@ -27,4 +27,13 @@ class SplatplostUSBConfigWidget(Form_SUSB):
         return {
             "serial_port":       self.serial_port.currentText(),
             "press_duration_ms": int(self.press_ms.value()),
+            }
+
+
+class RemoteConfigWidget(Form_Remote):
+    def get_connection_args(self):
+        return {
+            "conn_str": self.server_addr.text(),
+            "press_duration_ms": int(self.press_ms.value()),
+            "delay_ms":          int(self.delay_ms.value()),
             }

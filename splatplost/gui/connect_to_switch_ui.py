@@ -9,7 +9,7 @@ from pathlib import Path
 from PyQt6 import uic
 from PyQt6.QtWidgets import QApplication
 
-from splatplost.gui.backend_config import NxbtConfigWidget, SplatplostUSBConfigWidget
+from splatplost.gui.backend_config import NxbtConfigWidget, RemoteConfigWidget, SplatplostUSBConfigWidget
 from splatplost.gui.bugreport_ui import spawn_error_dialog
 
 file_path: Path = Path(__file__).parent / "connect_to_switch.ui"
@@ -26,6 +26,8 @@ class ConnectToSwitchUI(Form_ConnectToSwitch):
             self.config_widget_ = NxbtConfigWidget()
         elif backend == "Splatplost USB":
             self.config_widget_ = SplatplostUSBConfigWidget()
+        elif backend == "Remote":
+            self.config_widget_ = RemoteConfigWidget()
         elif backend == "":
             raise ValueError("Backend not selected")
         else:
