@@ -38,6 +38,7 @@ class AsyncWorker(QRunnable):
         self.signal = WorkerSignals()
         self.working_function = working_function
 
+    # noinspection PyUnresolvedReferences
     @pyqtSlot()
     def run(self) -> None:
         try:
@@ -49,6 +50,7 @@ class AsyncWorker(QRunnable):
         self.signal.finish.emit()
 
 
+# noinspection PyPep8Naming
 class PlotterUI(Form_plotter):
 
     def __init__(self, app, form):
@@ -120,7 +122,9 @@ class PlotterUI(Form_plotter):
 
         worker = AsyncWorker(self, pairing)
 
+        # noinspection PyUnresolvedReferences
         worker.signal.finish.connect(lambda: (success_callback(), self.thread_pool.waitForDone()))
+        # noinspection PyUnresolvedReferences
         worker.signal.error.connect(lambda e: (fail_callback(e), self.thread_pool.waitForDone()))
         self.thread_pool.start(worker)
 
@@ -283,7 +287,9 @@ class PlotterUI(Form_plotter):
             spawn_error_dialog(e, QApplication.translate("@default", "Error when drawing"))
             self.thread_pool.waitForDone()
 
+        # noinspection PyUnresolvedReferences
         worker.signal.finish.connect(success)
+        # noinspection PyUnresolvedReferences
         worker.signal.error.connect(fail)
         self.thread_pool.start(worker)
 
@@ -319,7 +325,9 @@ class PlotterUI(Form_plotter):
             spawn_error_dialog(e, QApplication.translate("@default", "Error when erasing"))
             self.thread_pool.waitForDone()
 
+        # noinspection PyUnresolvedReferences
         worker.signal.finish.connect(success)
+        # noinspection PyUnresolvedReferences
         worker.signal.error.connect(fail)
         self.thread_pool.start(worker)
 

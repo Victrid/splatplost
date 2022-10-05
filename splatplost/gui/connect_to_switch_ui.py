@@ -15,9 +15,11 @@ from splatplost.gui.bundler import ui_path
 Form_ConnectToSwitch, Dialog_ConnectToSwitch = uic.loadUiType(ui_path("connect_to_switch.ui"))
 
 
+# noinspection PyPep8Naming
 class ConnectToSwitchUI(Form_ConnectToSwitch):
     def __init__(self, parent, backend: str):
         super().__init__()
+        self.parent_dialog = None
         self.parent = parent
         self.backend = backend
         if backend == "nxbt":
@@ -55,7 +57,8 @@ class ConnectToSwitchUI(Form_ConnectToSwitch):
 
     def done_clicked(self):
         self.parent.ready_for_drawing()
-        self.parent_dialog.close()
+        if self.parent_dialog:
+            self.parent_dialog.close()
 
     def press_a_clicked(self):
         self.parent.press_a()

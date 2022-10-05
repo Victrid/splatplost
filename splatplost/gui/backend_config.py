@@ -17,6 +17,7 @@ class NxbtConfigWidget(Form_nxbt):
             }
 
 
+# noinspection PyPep8Naming
 class SplatplostUSBConfigWidget(Form_SUSB):
     def setupUi(self, config_widget):
         super().setupUi(config_widget)
@@ -35,7 +36,7 @@ class SplatplostUSBConfigWidget(Form_SUSB):
 class RemoteConfigWidget(Form_Remote):
     def get_connection_args(self):
         return {
-            "conn_str": self.server_addr.text(),
+            "conn_str":          self.server_addr.text(),
             "press_duration_ms": int(self.press_ms.value()),
             "delay_ms":          int(self.delay_ms.value()),
             }

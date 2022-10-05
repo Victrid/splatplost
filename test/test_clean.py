@@ -42,7 +42,6 @@ class TestCleaning(unittest.TestCase):
                      splatoon3=self.splatoon3, clear_drawing=False
                      )
 
-
             result = backend.get_result()
         # check the result array matches the input array
         assert np.array_equal(result, t)

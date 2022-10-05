@@ -283,16 +283,16 @@ Built with Arch Linux"
       <cc:Work
          rdf:about="">
         <cc:license
-           rdf:resource="http://creativecommons.org/publicdomain/zero/1.0/" />
+           rdf:resource="https://creativecommons.org/publicdomain/zero/1.0/" />
       </cc:Work>
       <cc:License
-         rdf:about="http://creativecommons.org/publicdomain/zero/1.0/">
+         rdf:about="https://creativecommons.org/publicdomain/zero/1.0/">
         <cc:permits
-           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+           rdf:resource="https://creativecommons.org/ns#Reproduction" />
         <cc:permits
-           rdf:resource="http://creativecommons.org/ns#Distribution" />
+           rdf:resource="https://creativecommons.org/ns#Distribution" />
         <cc:permits
-           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+           rdf:resource="https://creativecommons.org/ns#DerivativeWorks" />
       </cc:License>
     </rdf:RDF>
   </metadata>

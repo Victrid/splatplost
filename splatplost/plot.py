@@ -101,7 +101,7 @@ def execute_command_list(command_list: CommandList, connection: NXWrapper,
                 connection.button_press(command)
 
 
-def plot_block(entry_point: Coordinate, route: list[Coordinate], position: Coordinate, keyBinding: KeyBinding,
+def plot_block(entry_point: Coordinate, route: list[Coordinate], position: Coordinate, key_binding: KeyBinding,
                cursor_reset: bool, cursor_reset_time: int) -> tuple[CommandList, Coordinate]:
     """
     Plot a block.
@@ -109,7 +109,7 @@ def plot_block(entry_point: Coordinate, route: list[Coordinate], position: Coord
     :param entry_point: The entry point of the block.
     :param route: The route, of plotting dots, of the block.
     :param position: The current position of the cursor.
-    :param keyBinding: The key binding.
+    :param key_binding: The key binding.
     :param cursor_reset: Whether to reset the cursor.
     :param cursor_reset_time: The time to hold the button to reset the cursor.
     :return: The command list and the new position of the cursor.
@@ -121,7 +121,7 @@ def plot_block(entry_point: Coordinate, route: list[Coordinate], position: Coord
         command_list = []
     for coordinate in route:
         command_list += march(position, coordinate)
-        command_list += keyBinding.draw(BrushSize.SMALL)
+        command_list += key_binding.draw(BrushSize.SMALL)
         position = coordinate
     return command_list, position
 
@@ -264,6 +264,8 @@ def partial_erase_with_conn(connection: NXWrapper, key_binding: KeyBinding, hori
     :param key_binding: The key binding.
     :param horizontal_divider: The number of horizontal dividers.
     :param vertical_divider: The number of vertical dividers.
+    :param cursor_reset: Whether to reset the cursor.
+    :param cursor_reset_time: The time to reset the cursor.
     :param stable_mode: Whether to use stable mode.
     :param clear_drawing: Whether to clear the plot before plotting.
     :param plot_blocks: The blocks to plot.
@@ -320,7 +322,7 @@ def partial_plot_with_conn(connection: NXWrapper, blocks, key_binding: KeyBindin
             continue
         command_list, current_position = plot_block(entry_point=parse_coordinate(block["entry_point"]),
                                                     route=[parse_coordinate(coord) for coord in block["visit_route"]],
-                                                    position=current_position, keyBinding=key_binding,
+                                                    position=current_position, key_binding=key_binding,
                                                     cursor_reset=cursor_reset, cursor_reset_time=10000
                                                     )
         execute_command_list(command_list, connection, stable_mode=stable_mode)

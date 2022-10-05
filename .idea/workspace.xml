@@ -4,22 +4,25 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="af104d13-fbe7-4e42-8d81-e6131c50d65b" name="变更" comment="">
-      <change afterPath="$PROJECT_DIR$/setup.cfg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/splatplost/gui/bundler.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/splatplost/gui/i18n/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.name" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
+    <list default="true" id="af104d13-fbe7-4e42-8d81-e6131c50d65b" name="变更" comment="Get PyInstaller packaging right">
+      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/splatplost.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/splatplost.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/imagebuilder/airootfs/usr/share/wallpapers/splatplost.svg" beforeDir="false" afterPath="$PROJECT_DIR$/imagebuilder/airootfs/usr/share/wallpapers/splatplost.svg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/setup.cfg" beforeDir="false" afterPath="$PROJECT_DIR$/setup.cfg" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/setup.py" beforeDir="false" afterPath="$PROJECT_DIR$/setup.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/splatplost/gui/backend_config.py" beforeDir="false" afterPath="$PROJECT_DIR$/splatplost/gui/backend_config.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/splatplost/gui/bugreport_ui.py" beforeDir="false" afterPath="$PROJECT_DIR$/splatplost/gui/bugreport_ui.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/splatplost/gui/bundler.py" beforeDir="false" afterPath="$PROJECT_DIR$/splatplost/gui/bundler.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/splatplost/gui/connect_to_switch_ui.py" beforeDir="false" afterPath="$PROJECT_DIR$/splatplost/gui/connect_to_switch_ui.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/splatplost/gui/plotter.py" beforeDir="false" afterPath="$PROJECT_DIR$/splatplost/gui/plotter.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/splatplost/gui/plotter_ui.py" beforeDir="false" afterPath="$PROJECT_DIR$/splatplost/gui/plotter_ui.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/splatplost/gui/splatplost" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/splatplost/keybindings.py" beforeDir="false" afterPath="$PROJECT_DIR$/splatplost/keybindings.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/splatplost/plot.py" beforeDir="false" afterPath="$PROJECT_DIR$/splatplost/plot.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/splatplost/pyinstaller/hook-splatplost.py" beforeDir="false" afterPath="$PROJECT_DIR$/splatplost/pyinstaller/hook-splatplost.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/splatplost/route_handler.py" beforeDir="false" afterPath="$PROJECT_DIR$/splatplost/route_handler.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/splatplost/version.py" beforeDir="false" afterPath="$PROJECT_DIR$/splatplost/version.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/test_clean.py" beforeDir="false" afterPath="$PROJECT_DIR$/test/test_clean.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/test_plot.py" beforeDir="false" afterPath="$PROJECT_DIR$/test/test_plot.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -36,8 +39,19 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="GithubPullRequestsUISettings">
+    <option name="selectedUrlAndAccountId">
+      <UrlAndAccount>
+        <option name="accountId" value="5b5657c0-2ef3-4906-b66b-a8a239c9be5a" />
+        <option name="url" value="git@github.com:Victrid/splatplost.git" />
+      </UrlAndAccount>
+    </option>
+  </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="ProjectErrors" />
   </component>
   <component name="ProjectId" id="2FiapL9uRYe7tKGh0zxP4H47GTX" />
   <component name="ProjectViewState">
@@ -54,7 +68,8 @@
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
-    "settings.editor.selected.configurable": "preferences.pluginManager"
+    "run.code.analysis.last.selected.profile": "aDefault",
+    "settings.editor.selected.configurable": "Errors"
   }
 }]]></component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="应用程序级" UseSingleDictionary="true" transferred="true" />
@@ -65,8 +80,16 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1664977540246</updated>
-      <workItem from="1664977541848" duration="4653000" />
+      <workItem from="1664977541848" duration="6442000" />
     </task>
+    <task id="LOCAL-00001" summary="Get PyInstaller packaging right">
+      <created>1664982405241</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1664982405241</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -82,5 +105,9 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Get PyInstaller packaging right" />
+    <option name="LAST_COMMIT_MESSAGE" value="Get PyInstaller packaging right" />
   </component>
 </project>

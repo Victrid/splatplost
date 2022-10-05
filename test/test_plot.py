@@ -41,7 +41,9 @@ class TestDrawing(unittest.TestCase):
             from unittest.mock import patch
 
             with patch("builtins.input", input_mock):
-                # To test with PseudoS2Wrapper, we need to set the backend to a lambda function, and ignore the arguments
+                # To test with PseudoS2Wrapper, we need to set the backend to a lambda function, and ignore the
+                # arguments.
+
                 # noinspection PyTypeChecker
                 plot(order_file=f"{temp_dir}/test.json", backend=lambda *args, **kwargs: backend,
                      splatoon3=self.splatoon3

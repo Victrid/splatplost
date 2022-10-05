@@ -8,12 +8,12 @@ from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QApplication, QDialog, QMessageBox
 
 from splatplost.gui.bundler import ui_path
+from splatplost.version import __version__
 
 Form_bugreport, Dialog_bugreport = uic.loadUiType(ui_path("bugreport.ui"))
 
-from splatplost.version import __version__
 
-
+# noinspection PyPep8Naming
 class BugReportDialog(Form_bugreport):
     def __init__(self, exception: Exception):
         super().__init__()

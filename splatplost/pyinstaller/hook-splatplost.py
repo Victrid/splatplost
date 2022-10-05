@@ -8,6 +8,7 @@ def get_ui_files():
         data.append((ui, "splatplost"))
     return data
 
+
 def get_language_files():
     data = []
     for lang in glob.glob(os.path.join(os.path.dirname(__file__), "..", "gui", "i18n", "*.qm")):
