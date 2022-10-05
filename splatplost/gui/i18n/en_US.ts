@@ -4,101 +4,101 @@
 <context>
     <name>@default</name>
     <message>
-        <location filename="../bugreport_ui.py" line="125"/>
+        <location filename="../bugreport_ui.py" line="124"/>
         <source>Error happened</source>
         <translation>Error happened</translation>
     </message>
     <message>
-        <location filename="../connect_to_switch_ui.py" line="36"/>
+        <location filename="../connect_to_switch_ui.py" line="38"/>
         <source>Pairing...</source>
         <translation>Pairing...</translation>
     </message>
     <message>
-        <location filename="../connect_to_switch_ui.py" line="49"/>
+        <location filename="../connect_to_switch_ui.py" line="51"/>
         <source>Start Pairing</source>
         <translation>Start Pairing</translation>
     </message>
     <message>
-        <location filename="../connect_to_switch_ui.py" line="51"/>
+        <location filename="../connect_to_switch_ui.py" line="53"/>
         <source>Permission Error (Run as root?)</source>
         <translation>Permission Error (Run as root?)</translation>
     </message>
     <message>
-        <location filename="../connect_to_switch_ui.py" line="54"/>
+        <location filename="../connect_to_switch_ui.py" line="56"/>
         <source>Error when pairing</source>
         <translation>Error when pairing</translation>
     </message>
     <message>
-        <location filename="../plotter.py" line="247"/>
-        <location filename="../plotter.py" line="233"/>
-        <location filename="../plotter.py" line="178"/>
-        <location filename="../plotter.py" line="177"/>
-        <location filename="../plotter.py" line="75"/>
-        <location filename="../plotter.py" line="74"/>
+        <location filename="../plotter.py" line="252"/>
+        <location filename="../plotter.py" line="238"/>
+        <location filename="../plotter.py" line="183"/>
+        <location filename="../plotter.py" line="182"/>
+        <location filename="../plotter.py" line="78"/>
+        <location filename="../plotter.py" line="77"/>
         <source>No file loaded</source>
         <translation>No file loaded</translation>
     </message>
     <message>
-        <location filename="../plotter.py" line="81"/>
-        <location filename="../plotter.py" line="80"/>
+        <location filename="../plotter.py" line="84"/>
+        <location filename="../plotter.py" line="83"/>
         <source>Splatoon version not selected</source>
         <translation>Splatoon version not selected</translation>
     </message>
     <message>
-        <location filename="../plotter.py" line="87"/>
-        <location filename="../plotter.py" line="86"/>
+        <location filename="../plotter.py" line="90"/>
+        <location filename="../plotter.py" line="89"/>
         <source>Switch not connected</source>
         <translation>Switch not connected</translation>
     </message>
     <message>
-        <location filename="../plotter.py" line="97"/>
+        <location filename="../plotter.py" line="100"/>
         <source>The switch seems to be connected. Are you sure you want to reconnect?</source>
         <translation>The switch seems to be connected. Are you sure you want to reconnect?</translation>
     </message>
     <message>
-        <location filename="../plotter.py" line="146"/>
-        <location filename="../plotter.py" line="145"/>
+        <location filename="../plotter.py" line="151"/>
+        <location filename="../plotter.py" line="150"/>
         <source>No backend selected</source>
         <translation>No backend selected</translation>
     </message>
     <message>
-        <location filename="../plotter.py" line="150"/>
+        <location filename="../plotter.py" line="155"/>
         <source>Error when connecting to switch</source>
         <translation>Error when connecting to switch</translation>
     </message>
     <message>
-        <location filename="../plotter.py" line="171"/>
+        <location filename="../plotter.py" line="176"/>
         <source>Error when loading image</source>
         <translation>Error when loading image</translation>
     </message>
     <message>
-        <location filename="../plotter.py" line="186"/>
+        <location filename="../plotter.py" line="191"/>
         <source>Error when reading file</source>
         <translation>Error when reading file</translation>
     </message>
     <message>
-        <location filename="../plotter.py" line="196"/>
+        <location filename="../plotter.py" line="201"/>
         <source>File read successfully</source>
         <translation>File read successfully</translation>
     </message>
     <message>
-        <location filename="../plotter.py" line="312"/>
-        <location filename="../plotter.py" line="276"/>
+        <location filename="../plotter.py" line="319"/>
+        <location filename="../plotter.py" line="281"/>
         <source>Drawing finished</source>
         <translation>Drawing finished</translation>
     </message>
     <message>
-        <location filename="../plotter.py" line="282"/>
+        <location filename="../plotter.py" line="287"/>
         <source>Error when drawing</source>
         <translation>Error when drawing</translation>
     </message>
     <message>
-        <location filename="../plotter.py" line="318"/>
+        <location filename="../plotter.py" line="325"/>
         <source>Error when erasing</source>
         <translation>Error when erasing</translation>
     </message>
     <message>
-        <location filename="../plotter.py" line="346"/>
+        <location filename="../plotter.py" line="355"/>
         <source>**Splatplost version {}**</source>
         <translation>**Splatplost version {}**</translation>
     </message>
@@ -249,6 +249,35 @@ If you need to select the controller use &quot;Press A&quot;.</translation>
     </message>
     <message>
         <location filename="../nxbt.ui" line="0"/>
+        <source>Delay Time</source>
+        <translation>Delay Time</translation>
+    </message>
+</context>
+<context>
+    <name>Remote</name>
+    <message>
+        <location filename="../remote.ui" line="0"/>
+        <source>Form</source>
+        <translation>Form</translation>
+    </message>
+    <message>
+        <location filename="../remote.ui" line="0"/>
+        <source>Remote Server</source>
+        <translation>Remote Server</translation>
+    </message>
+    <message>
+        <location filename="../remote.ui" line="0"/>
+        <source>Press Time</source>
+        <translation>Press Time</translation>
+    </message>
+    <message>
+        <location filename="../remote.ui" line="0"/>
+        <location filename="../remote.ui" line="0"/>
+        <source> ms</source>
+        <translation> ms</translation>
+    </message>
+    <message>
+        <location filename="../remote.ui" line="0"/>
         <source>Delay Time</source>
         <translation>Delay Time</translation>
     </message>
