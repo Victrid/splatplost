@@ -2,15 +2,14 @@ import platform
 import subprocess
 import sys
 import traceback
-from pathlib import Path
 
 from PyQt6 import QtWidgets, uic
 from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QApplication, QDialog, QMessageBox
 
-file_path = Path(__file__).parent / "bugreport.ui"
+from splatplost.gui.bundler import ui_path
 
-Form_bugreport, Dialog_bugreport = uic.loadUiType(str(file_path))
+Form_bugreport, Dialog_bugreport = uic.loadUiType(ui_path("bugreport.ui"))
 
 from splatplost.version import __version__
 

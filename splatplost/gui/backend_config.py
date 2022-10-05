@@ -1,12 +1,14 @@
-from pathlib import Path
-
 from PyQt6 import uic
 
-Form_nxbt, _ = uic.loadUiType(str(Path(__file__).parent / "nxbt.ui"))
+from splatplost.gui.bundler import ui_path
 
-Form_SUSB, _ = uic.loadUiType(str(Path(__file__).parent / "splatplost_USB.ui"))
+Form_nxbt, _ = uic.loadUiType(ui_path("nxbt.ui"))
 
-Form_Remote, _ = uic.loadUiType(str(Path(__file__).parent / "remote.ui"))
+Form_SUSB, _ = uic.loadUiType(ui_path("splatplost_USB.ui"))
+
+Form_Remote, _ = uic.loadUiType(ui_path("remote.ui"))
+
+
 class NxbtConfigWidget(Form_nxbt):
     def get_connection_args(self):
         return {

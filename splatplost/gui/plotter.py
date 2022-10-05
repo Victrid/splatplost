@@ -16,6 +16,7 @@ from libnxctrl.wrapper import Button, NXWrapper
 
 from splatplost.generate_route import generate_route_file
 from splatplost.gui.bugreport_ui import spawn_error_dialog
+from splatplost.gui.bundler import lang_path
 from splatplost.gui.connect_to_switch_ui import ConnectToSwitchUI
 from splatplost.gui.plotter_ui import Form_plotter
 from splatplost.keybindings import Splatoon2KeyBinding, Splatoon3KeyBinding
@@ -328,7 +329,7 @@ class PlotterUI(Form_plotter):
 
         :param language_code: The language code to change to
         """
-        self.trans.load(str(Path(__file__).parent / "i18n" / "{}.qm".format(language_code)))
+        self.trans.load(str(Path(lang_path("{}.qm".format(language_code)))))
         QtWidgets.QApplication.instance().installTranslator(self.trans)
         self.retranslateUi(self.form)
 
@@ -392,7 +393,10 @@ def main():
     form = QtWidgets.QMainWindow()
 
     t = QtCore.QTranslator()
-    t.load(str(Path(__file__).parent / "i18n" / (QLocale.system().name() + ".qm")))
+    if (Path(lang_path(QLocale.system().name() + ".qm"))).exists():
+        t.load(str(Path(lang_path(QLocale.system().name() + ".qm"))))
+    else:
+        t.load(str(Path(lang_path("C.qm"))))
     app.installTranslator(t)
 
     window = PlotterUI(app, form)
