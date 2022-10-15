@@ -20,6 +20,11 @@ class KeyBinding:
 
     @staticmethod
     @abstractmethod
+    def save() -> CommandList:
+        pass
+
+    @staticmethod
+    @abstractmethod
     def clear() -> CommandList:
         pass
 
@@ -62,6 +67,11 @@ class Splatoon2KeyBinding(KeyBinding):
 
     @staticmethod
     @abstractmethod
+    def save() -> CommandList:
+        return [Button.B]
+
+    @staticmethod
+    @abstractmethod
     def clear() -> CommandList:
         return [Button.MINUS]
 
@@ -96,6 +106,11 @@ class Splatoon3KeyBinding(KeyBinding):
 
         commands += [Button.B]
         return commands
+
+    @staticmethod
+    @abstractmethod
+    def save() -> CommandList:
+        return [Button.MINUS]
 
     @staticmethod
     @abstractmethod
