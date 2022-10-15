@@ -267,7 +267,8 @@ class PlotterUI(Form_plotter):
                                    cursor_reset_time=1000 * int(self.cal_time.value()),
                                    stable_mode=self.stable_mode.isChecked(),
                                    clear_drawing=self.clear_drawing.isChecked(),
-                                   plot_blocks=self.RouteFile.get_selected_blocks()
+                                   plot_blocks=self.RouteFile.get_selected_blocks(),
+                                   save_and_exit=self.save_and_exit.isChecked()
                                    )
 
         worker = AsyncWorker(self, draw_func)
@@ -305,7 +306,8 @@ class PlotterUI(Form_plotter):
                                     cursor_reset_time=1000 * int(self.cal_time.value()),
                                     stable_mode=self.stable_mode.isChecked(),
                                     clear_drawing=self.clear_drawing.isChecked(),
-                                    plot_blocks=self.RouteFile.get_selected_blocks()
+                                    plot_blocks=self.RouteFile.get_selected_blocks(),
+                                    save_and_exit=self.save_and_exit.isChecked()
                                     )
 
         worker = AsyncWorker(self, draw_func)

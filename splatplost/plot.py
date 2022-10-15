@@ -256,7 +256,7 @@ def partial_erase(order_file: str, backend: Type[NXWrapper], delay_ms: int = 100
 
 def partial_erase_with_conn(connection: NXWrapper, key_binding: KeyBinding, horizontal_divider: int,
                             vertical_divider: int, cursor_reset, cursor_reset_time, stable_mode: bool = False,
-                            clear_drawing: bool = False, plot_blocks: list[int] = None) -> None:
+                            clear_drawing: bool = False, plot_blocks: list[int] = None, save_and_exit: bool = False) -> None:
     """
     Clean blocks.
 
@@ -269,6 +269,7 @@ def partial_erase_with_conn(connection: NXWrapper, key_binding: KeyBinding, hori
     :param stable_mode: Whether to use stable mode.
     :param clear_drawing: Whether to clear the plot before plotting.
     :param plot_blocks: The blocks to plot.
+    :param save_and_exit: Whether to save an exit after completing plotting.
     """
 
     # Goto (0,0) point
@@ -291,10 +292,13 @@ def partial_erase_with_conn(connection: NXWrapper, key_binding: KeyBinding, hori
                                                      )
         execute_command_list(command_list, connection, stable_mode=stable_mode)
 
+    if save_and_exit:
+        execute_command_list(key_binding.save(), connection, stable_mode=stable_mode)
+
 
 def partial_plot_with_conn(connection: NXWrapper, blocks, key_binding: KeyBinding, cursor_reset, cursor_reset_time,
                            stable_mode: bool = False, clear_drawing: bool = False,
-                           plot_blocks: list[int] = None) -> None:
+                           plot_blocks: list[int] = None, save_and_exit: bool = False) -> None:
     """
     Plot blocks.
 
@@ -306,6 +310,7 @@ def partial_plot_with_conn(connection: NXWrapper, blocks, key_binding: KeyBindin
     :param stable_mode: Whether to use stable mode.
     :param clear_drawing: Whether to clear the plot before plotting.
     :param plot_blocks: The blocks to plot.
+    :param save_and_exit: Whether to save an exit after completing plotting.
     """
     # Goto (0,0) point
     command_list, current_position = reset_cursor_position((0, 0), (0, 0), cursor_reset_time)
@@ -326,6 +331,9 @@ def partial_plot_with_conn(connection: NXWrapper, blocks, key_binding: KeyBindin
                                                     cursor_reset=cursor_reset, cursor_reset_time=10000
                                                     )
         execute_command_list(command_list, connection, stable_mode=stable_mode)
+
+    if save_and_exit:
+        execute_command_list(key_binding.save(), connection, stable_mode=stable_mode)
 
 
 def partial_plot(order_file: str, backend: Type[NXWrapper], delay_ms: int = 100, press_duration_ms: int = 100,
