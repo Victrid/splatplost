@@ -22,7 +22,7 @@ setup(
             "Development Status :: 3 - Alpha",
             ],
         install_requires=[
-            "numpy~=1.23.2",
+            "numpy>=1.23.2,<1.25.0",
             "Pillow~=9.2.0",
             "setuptools~=65.3.0",
             "scipy~=1.9.1",
