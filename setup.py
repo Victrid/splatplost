@@ -23,7 +23,7 @@ setup(
             ],
         install_requires=[
             "numpy~=1.23.2",
-            "Pillow~=9.2.0",
+            "Pillow>=9.2,<9.5",
             "setuptools~=65.3.0",
             "scipy~=1.9.1",
             "tqdm~=4.64.0",
