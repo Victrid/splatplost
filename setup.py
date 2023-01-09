@@ -25,7 +25,7 @@ setup(
             "numpy~=1.23.2",
             "Pillow~=9.2.0",
             "setuptools~=65.3.0",
-            "scipy~=1.9.1",
+            "scipy>=1.9.1,<1.11.0",
             "tqdm~=4.64.0",
             "scikit-image~=0.19.3",
             "libnxctrl~=0.1.7",
