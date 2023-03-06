@@ -24,7 +24,7 @@ setup(
         install_requires=[
             "numpy~=1.23.2",
             "Pillow~=9.2.0",
-            "setuptools~=65.3.0",
+            "setuptools>=65.3,<67.6",
             "scipy~=1.9.1",
             "tqdm~=4.64.0",
             "scikit-image~=0.19.3",
